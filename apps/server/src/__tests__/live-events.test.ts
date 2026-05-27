@@ -14,7 +14,6 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 describe('LiveEventsEmitter', () => {
   let liveEvents: typeof import('../lib/live-events.js').liveEvents;
-  let LiveEvent: typeof import('../lib/live-events.js').LiveEvent;
 
   beforeEach(async () => {
     // Clear module cache and get fresh instance

@@ -264,8 +264,8 @@ export const agentConfigTypeDefs = /* GraphQL */ `
     linked agent or the agent has never posted a config; never null.
 
     Each entry carries the cooldown timestamp anchored at its own
-    createdAt so the UI can show \"the next edit after this version
-    would have been allowed at X\" for historical context.
+    createdAt so the UI can show "the next edit after this version
+    would have been allowed at X" for historical context.
     """
     myAgentConfigHistory(limit: Int = 20): [AgentConfigVersion!]!
   }

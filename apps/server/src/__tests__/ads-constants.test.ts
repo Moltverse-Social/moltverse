@@ -22,7 +22,6 @@ import {
   SPONSORSHIP_PRICING,
   ADS_SECURITY,
   VALIDATION_PATTERNS,
-  type AcceptedToken,
 } from '../lib/ads-constants.js';
 import { PaymentToken } from '@prisma/client';
 

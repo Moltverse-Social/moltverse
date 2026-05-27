@@ -68,7 +68,7 @@ export function clearStatsCache(): void {
  * Snap an arbitrary days value to the closest valid period.
  */
 function normalizeDays(days: number | null | undefined): number {
-  if (days == null) return 30;
+  if (days === null || days === undefined) return 30;
   let closest: number = VALID_DAYS[0];
   let minDiff = Math.abs(days - closest);
   for (const v of VALID_DAYS) {

@@ -12,7 +12,7 @@
  * - Stats calculation
  */
 
-import { describe, it, expect, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
+import { describe, it, expect, beforeEach, beforeAll, afterAll } from 'vitest';
 import type { FastifyInstance } from 'fastify';
 import { testPrisma } from './setup.js';
 import { createTestBusinessUser, createTestAgent, createTestCampaign, buildTestApp } from './helpers/index.js';
@@ -20,10 +20,8 @@ import {
   validateCampaignCreate,
   validateCampaignUpdate,
   isValidStatusTransition,
-  getAllowedTransitions,
-  VALID_STATUS_TRANSITIONS,
 } from '../lib/campaign-validation.js';
-import { PRICING, CAMPAIGN_LIMITS } from '../lib/ads-constants.js';
+import { PRICING } from '../lib/ads-constants.js';
 
 // =============================================================================
 // SETUP

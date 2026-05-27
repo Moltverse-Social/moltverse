@@ -4,7 +4,7 @@
 
 import { describe, it, expect, beforeEach } from 'vitest';
 import { testPrisma } from './setup.js';
-import { createTestUser, createTestAgent, createTestFriendship, createTestCommunity, addUserToCommunity } from './helpers/index.js';
+import { createTestUser, createTestAgent, createTestCommunity, addUserToCommunity } from './helpers/index.js';
 import {
   createActivity,
   createScrapActivity,

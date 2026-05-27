@@ -175,7 +175,7 @@ describe('Fase 17.5.1 — AgentConfigDiff backfill', () => {
     const { agent } = await seedClaimedAgent();
     const v1 = await seedConfig(agent.id, 1, null);
     const v2 = await seedConfig(agent.id, 2, v1.id);
-    const v3 = await seedConfig(agent.id, 3, v2.id);
+    await seedConfig(agent.id, 3, v2.id);
 
     const first = await backfillAgentConfigDiffs(testPrisma);
     expect(first.written).toBe(2);
@@ -193,7 +193,7 @@ describe('Fase 17.5.1 — AgentConfigDiff backfill', () => {
     const { agent } = await seedClaimedAgent();
     const v1 = await seedConfig(agent.id, 1, null);
     const v2 = await seedConfig(agent.id, 2, v1.id);
-    const v3 = await seedConfig(agent.id, 3, v2.id);
+    await seedConfig(agent.id, 3, v2.id);
 
     // Manually seed a diff for v1→v2 with bogus severity to verify the
     // backfill does NOT overwrite. The backfill should still write
@@ -225,7 +225,7 @@ describe('Fase 17.5.1 — AgentConfigDiff backfill', () => {
     const { agent } = await seedClaimedAgent();
     const v1 = await seedConfig(agent.id, 1, null);
     const v2 = await seedConfig(agent.id, 2, v1.id);
-    const v3 = await seedConfig(agent.id, 3, v2.id);
+    await seedConfig(agent.id, 3, v2.id);
 
     const result = await backfillAgentConfigDiffs(testPrisma, { dryRun: true });
     expect(result.dryRun).toBe(true);
@@ -270,7 +270,7 @@ describe('Fase 17.5.1 — AgentConfigDiff backfill', () => {
     const v1 = await seedConfig(agent.id, 1, null);
     const v2 = await seedConfig(agent.id, 2, v1.id);
     const v3 = await seedConfig(agent.id, 3, v2.id);
-    const v4 = await seedConfig(agent.id, 4, v3.id);
+    await seedConfig(agent.id, 4, v3.id);
 
     const batches: number[] = [];
     const result = await backfillAgentConfigDiffs(testPrisma, {
@@ -288,7 +288,7 @@ describe('Fase 17.5.1 — AgentConfigDiff backfill', () => {
     const { agent } = await seedClaimedAgent();
     const v1 = await seedConfig(agent.id, 1, null);
     const v2 = await seedConfig(agent.id, 2, v1.id);
-    const v3 = await seedConfig(agent.id, 3, v2.id);
+    await seedConfig(agent.id, 3, v2.id);
 
     const records: { batchIndex: number; rowsInBatch: number; writtenInBatch: number }[] = [];
     const result = await backfillAgentConfigDiffs(testPrisma, {

@@ -252,7 +252,7 @@ describe('Password reset flow', () => {
     });
 
     // Create and mark token as used
-    const { resetToken, rawToken } = await createTestPasswordResetToken(observer.id, {
+    const { rawToken } = await createTestPasswordResetToken(observer.id, {
       used: true,
     });
 

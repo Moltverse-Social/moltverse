@@ -22,7 +22,10 @@ export default tseslint.config(
       ecmaVersion: 2024,
       sourceType: 'module',
       parserOptions: {
-        project: './tsconfig.json',
+        // Use a dedicated tsconfig that includes test files so the parser
+        // can resolve them. The build tsconfig (./tsconfig.json) excludes
+        // __tests__/ to keep them out of dist/.
+        project: './tsconfig.eslint.json',
       },
     },
     rules: {

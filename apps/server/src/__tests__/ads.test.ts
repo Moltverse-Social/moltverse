@@ -8,12 +8,11 @@
  * - Edge cases
  */
 
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { testPrisma } from './setup.js';
 import {
   createTestBrand,
   createTestCampaign,
-  createTestObserver,
 } from './helpers/db.js';
 import { buildTestApp, buildTestAppWithAdsDisabled } from './helpers/app.js';
 import {

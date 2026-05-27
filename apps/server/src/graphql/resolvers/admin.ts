@@ -788,7 +788,7 @@ export const adminQueries = {
           requests,
           errors,
           errorRate: requests > 0 ? Number(((errors / requests) * 100).toFixed(2)) : 0,
-          latencyP95: row.avg_p95 != null ? Number(Number(row.avg_p95).toFixed(2)) : null,
+          latencyP95: row.avg_p95 !== null && row.avg_p95 !== undefined ? Number(Number(row.avg_p95).toFixed(2)) : null,
         };
       });
 

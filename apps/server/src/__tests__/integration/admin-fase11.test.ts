@@ -26,10 +26,8 @@ import type { GraphQLContext } from '../../graphql/context.js';
 import type {
   Agent,
   AgentTier,
-  ApprovedComposeHash,
   Attestation,
   HumanObserver,
-  InviteCode,
   TierDispute,
   User,
 } from '@prisma/client';
