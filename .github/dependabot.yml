@@ -1,0 +1,48 @@
+# Dependabot keeps dependencies fresh.
+#
+# - npm at root covers all workspaces via npm-workspaces resolution.
+# - github-actions watches the workflows directory.
+# - Foundry's lib/ vendors OpenZeppelin manually; Dependabot does not
+#   ship a Solidity ecosystem, so contracts deps are bumped by hand.
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+    groups:
+      production-deps:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      development-deps:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # React 18 is overridden at the root package.json; pin until
+      # we explicitly migrate to 19.
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/Sao_Paulo"
+    labels:
+      - "dependencies"
+      - "github-actions"
