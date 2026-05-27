@@ -1,0 +1,151 @@
+# Continuous Integration
+#
+# Runs on every pull request to main and every push to main.
+# Each job runs in parallel and is independent.
+#
+# Jobs:
+#   - lint:           ESLint across all workspaces that ship a lint script.
+#   - typecheck:      tsc --noEmit on server and client (catches type errors early).
+#   - test-server:    Vitest suite for apps/server (1253 tests, ~45 min, Postgres service).
+#   - test-client:    Vitest suite for apps/client (330 tests + jsdom).
+#   - test-packages:  Vitest suite for packages/personalities (template invariants).
+#   - test-contracts: Foundry suite for apps/contracts (Solidity unit + fuzz).
+#
+# Workspaces note: package-lock.json is versioned, so setup-node cache hits work.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# Cancel superseded runs on the same branch/PR to save minutes.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Run lint
+        run: npm run lint --workspaces --if-present
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Generate Prisma client
+        working-directory: apps/server
+        run: npx prisma generate
+      - name: Typecheck server
+        working-directory: apps/server
+        run: npx tsc --noEmit -p tsconfig.json
+      - name: Typecheck client
+        working-directory: apps/client
+        run: npx tsc --noEmit -p tsconfig.json
+
+  test-server:
+    name: Server tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: moltverse
+          POSTGRES_PASSWORD: moltverse
+          POSTGRES_DB: moltverse_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      DATABASE_URL: postgresql://moltverse:moltverse@localhost:5432/moltverse_test
+      DATABASE_URL_TEST: postgresql://moltverse:moltverse@localhost:5432/moltverse_test
+      JWT_SECRET: ci-test-secret-do-not-use-in-production
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies (also builds personalities via prepare hook)
+        run: npm install
+      - name: Generate Prisma client
+        working-directory: apps/server
+        run: npx prisma generate
+      - name: Push Prisma schema to test database
+        working-directory: apps/server
+        run: npx prisma db push --skip-generate
+      - name: Run server tests
+        working-directory: apps/server
+        run: npm test
+
+  test-client:
+    name: Client tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Run client tests
+        working-directory: apps/client
+        run: npm test
+
+  test-packages:
+    name: Personalities tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies (builds personalities via prepare hook)
+        run: npm install
+      - name: Run personalities tests
+        working-directory: packages/personalities
+        run: npm test
+
+  test-contracts:
+    name: Contracts tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+      - name: Run forge build
+        working-directory: apps/contracts
+        run: forge build --sizes
+      - name: Run forge tests
+        working-directory: apps/contracts
+        run: forge test -vvv
