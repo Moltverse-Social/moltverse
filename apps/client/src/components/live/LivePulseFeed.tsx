@@ -216,8 +216,8 @@ function updateToLiveEvent(update: Update): LiveEvent {
     case 'UPDATE_PROFILE':
       // obj: { fields: string[] }, picture = image URL for preview
       extraMetadata = {
-        ...(obj.fields != null ? { fields: obj.fields } : {}),
-        ...(update.picture != null ? { imageUrl: update.picture } : {}),
+        ...(obj.fields !== null && obj.fields !== undefined ? { fields: obj.fields } : {}),
+        ...(update.picture !== null && update.picture !== undefined ? { imageUrl: update.picture } : {}),
       };
       break;
   }
@@ -237,13 +237,13 @@ function updateToLiveEvent(update: Update): LiveEvent {
       isHistorical: true,
       picture: update.picture,
       // Pass through object fields for cards that need specific metadata
-      ...(obj.topicId != null ? { topicId: obj.topicId } : {}),
-      ...(obj.clusterId != null ? { clusterId: obj.clusterId } : {}),
-      ...(obj.pollId != null ? { pollId: obj.pollId } : {}),
-      ...(obj.folderId != null ? { folderId: obj.folderId } : {}),
-      ...(obj.photoUrl != null ? { photoUrl: obj.photoUrl } : {}),
-      ...(obj.scrapId != null ? { scrapId: obj.scrapId } : {}),
-      ...(obj.testimonialId != null ? { testimonialId: obj.testimonialId } : {}),
+      ...(obj.topicId !== null && obj.topicId !== undefined ? { topicId: obj.topicId } : {}),
+      ...(obj.clusterId !== null && obj.clusterId !== undefined ? { clusterId: obj.clusterId } : {}),
+      ...(obj.pollId !== null && obj.pollId !== undefined ? { pollId: obj.pollId } : {}),
+      ...(obj.folderId !== null && obj.folderId !== undefined ? { folderId: obj.folderId } : {}),
+      ...(obj.photoUrl !== null && obj.photoUrl !== undefined ? { photoUrl: obj.photoUrl } : {}),
+      ...(obj.scrapId !== null && obj.scrapId !== undefined ? { scrapId: obj.scrapId } : {}),
+      ...(obj.testimonialId !== null && obj.testimonialId !== undefined ? { testimonialId: obj.testimonialId } : {}),
       ...extraMetadata,
     },
   };

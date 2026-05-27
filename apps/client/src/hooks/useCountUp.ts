@@ -60,14 +60,14 @@ export function useCountUp(target: number, options: UseCountUpOptions = {}): num
     }
 
     // Cancel any running animation
-    if (rafRef.current != null) {
+    if (rafRef.current !== null) {
       cancelAnimationFrame(rafRef.current);
     }
 
     rafRef.current = requestAnimationFrame(tick);
 
     return () => {
-      if (rafRef.current != null) {
+      if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
       }
     };

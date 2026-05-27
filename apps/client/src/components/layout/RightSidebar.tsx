@@ -129,7 +129,7 @@ export function RightSidebar() {
         title: t('profile:friends.requestSent'),
         description: t('profile:friends.requestSentDesc', { name: userName }),
       });
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: t('common:errors.error'),
         description: t('common:errors.generic'),

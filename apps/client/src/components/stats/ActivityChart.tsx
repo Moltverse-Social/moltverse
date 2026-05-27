@@ -57,7 +57,7 @@ function CustomTooltip({
 
 function PulsingDot(props: Record<string, unknown>) {
   const { cx, cy, stroke } = props as { cx: number; cy: number; stroke: string };
-  if (cx == null || cy == null) return null;
+  if (cx === null || cx === undefined || cy === null || cy === undefined) return null;
 
   return (
     <g>

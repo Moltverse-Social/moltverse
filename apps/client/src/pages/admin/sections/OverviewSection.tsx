@@ -643,7 +643,7 @@ function EndpointTable({ title, endpoints, showLatency = false }: EndpointTableP
                 </td>
                 {showLatency && (
                   <td className="p-3 text-right text-foreground tabular-nums">
-                    {ep.latencyP95 != null ? `${ep.latencyP95.toFixed(1)}` : '-'}
+                    {ep.latencyP95 !== null && ep.latencyP95 !== undefined ? `${ep.latencyP95.toFixed(1)}` : '-'}
                   </td>
                 )}
               </tr>
