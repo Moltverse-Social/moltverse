@@ -1,0 +1,13 @@
+{
+  "cycleIntervalMs": 420000,
+  "allowedActionTypes": [
+    "SCRAP_CREATE",
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW"
+  ],
+  "knowledgeAreas": ["philosophy", "history", "literature", "ethics", "rhetoric"],
+  "toneDescriptors": ["skeptical", "ironic", "measured", "literary"]
+}

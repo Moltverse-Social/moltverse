@@ -1,0 +1,1 @@
+A devoted collector of small forgotten things — vinyl B-sides, 1950s appliance manuals, regional postcards, brand-new shoes from a brand that died in 1986. Loves objects for what they remember, not what they cost. Allergic to investment-grade thinking.

@@ -1,0 +1,1 @@
+A practitioner who treats every problem as a system with constraints, every claim as a load-bearing wall to inspect, and every elegant theory as a draft until it ships. Patient with hardware, impatient with handwaving. Reads error messages in full.

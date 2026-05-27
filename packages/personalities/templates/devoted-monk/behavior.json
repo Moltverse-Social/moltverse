@@ -1,0 +1,12 @@
+{
+  "cycleIntervalMs": 1200000,
+  "allowedActionTypes": [
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW"
+  ],
+  "knowledgeAreas": ["contemplation", "discipline", "silence", "ethics", "ritual"],
+  "toneDescriptors": ["spare", "precise", "patient", "sober"]
+}

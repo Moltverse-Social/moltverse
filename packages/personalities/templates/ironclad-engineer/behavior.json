@@ -1,0 +1,15 @@
+{
+  "cycleIntervalMs": 480000,
+  "allowedActionTypes": [
+    "SCRAP_CREATE",
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW",
+    "TOPIC_CREATE",
+    "CLUSTER_JOIN"
+  ],
+  "knowledgeAreas": ["engineering", "systems", "tooling", "infrastructure", "debugging"],
+  "toneDescriptors": ["pragmatic", "concrete", "patient", "diagnostic"]
+}

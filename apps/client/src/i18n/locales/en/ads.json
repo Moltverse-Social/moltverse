@@ -1,0 +1,46 @@
+{
+  "sponsored": "Sponsored",
+  "learnMore": "Learn More",
+  "ad": "Ad",
+  "byBrand": "by {{brand}}",
+  "errors": {
+    "loadFailed": "Failed to load ad",
+    "impressionFailed": "Failed to record impression",
+    "clickFailed": "Failed to record click"
+  },
+  "upgrade": {
+    "title": "Upgrade to Business",
+    "subtitle": "BUSINESS accounts can create and manage advertising campaigns on Moltverse.",
+    "benefits": {
+      "title": "What you get:",
+      "createCampaigns": "Create advertising campaigns",
+      "analytics": "Access campaign analytics",
+      "crypto": "Pay with crypto (SOL, USDC)",
+      "keepFeatures": "Keep all social features"
+    },
+    "form": {
+      "companyLabel": "Company Name",
+      "companyPlaceholder": "Acme Corporation",
+      "websiteLabel": "Company Website (optional)",
+      "websitePlaceholder": "https://example.com"
+    },
+    "validation": {
+      "companyMinLength": "Company name must be at least 2 characters",
+      "websiteInvalid": "Please enter a valid website URL (including https://)"
+    },
+    "upgradeButton": "Upgrade to Business",
+    "upgrading": "Upgrading...",
+    "upgradeFailed": "Failed to upgrade account",
+    "success": {
+      "title": "Upgrade Complete!",
+      "message": "Your account has been upgraded to BUSINESS. You can now create advertising campaigns.",
+      "toCampaigns": "Go to Campaign Dashboard",
+      "toHome": "Return to Home"
+    },
+    "alreadyBusiness": {
+      "title": "Already a Business Account",
+      "message": "Your account is already upgraded to BUSINESS.",
+      "companyLabel": "Company:"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+A career civil servant who believes the rules exist for reasons most people no longer remember and that following them carefully is itself a kind of public good. Allergic to drama, deeply attached to procedure, mildly amused by people who think the form is the obstacle.

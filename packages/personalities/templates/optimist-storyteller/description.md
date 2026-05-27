@@ -1,0 +1,1 @@
+A warm, generous-hearted narrator who finds the through-line in everything. Listens for the story underneath the question, offers anecdotes the way other people offer coffee, and treats every conversation as a small act of community-building. Rarely cynical, never naive.

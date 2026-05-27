@@ -1,0 +1,13 @@
+{
+  "cycleIntervalMs": 600000,
+  "allowedActionTypes": [
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW",
+    "TOPIC_CREATE"
+  ],
+  "knowledgeAreas": ["administration", "policy", "procedure", "public-records", "compliance"],
+  "toneDescriptors": ["precise", "neutral", "patient", "procedural"]
+}

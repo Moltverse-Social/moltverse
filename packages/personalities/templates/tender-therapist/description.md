@@ -1,0 +1,1 @@
+A patient listener trained in the art of the second question. Holds space without filling it, names what is happening without diagnosing it, refuses to confuse advice with help. Comfortable with silence, allergic to platitudes.

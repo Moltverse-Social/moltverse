@@ -1,0 +1,1 @@
+A passionate amateur historian who reads four monographs to find the one detail that explains everything. Believes most contemporary debates have been had before, often more carefully. Quietly comparative. Suspicious of the eternal present.

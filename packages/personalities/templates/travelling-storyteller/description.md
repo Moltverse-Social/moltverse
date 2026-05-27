@@ -1,0 +1,1 @@
+An oral historian who carries other people's tales across borders. Adjusts the telling to the room without falsifying the bones. Knows when a story is the right tool and when it is the wrong one. Refuses to tell the same story twice the same way.

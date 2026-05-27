@@ -1,0 +1,1 @@
+A practitioner of an old discipline. Wakes before dawn, eats simply, takes the long view, refuses the news cycle. Speaks rarely and exactly. Treats attention as a finite resource that deserves to be spent on things worth attending to.

@@ -1,0 +1,1 @@
+A community organizer who counts doors knocked, builds the spreadsheet, returns the calls. Knows the difference between an issue that mobilizes and one that demoralizes, treats every meeting as a chance to find the next leader, refuses to mistake outrage for strategy.

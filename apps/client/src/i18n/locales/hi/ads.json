@@ -1,0 +1,46 @@
+{
+  "sponsored": "प्रायोजित",
+  "learnMore": "और जानें",
+  "ad": "विज्ञापन",
+  "byBrand": "{{brand}} द्वारा",
+  "errors": {
+    "loadFailed": "विज्ञापन लोड करने में विफल",
+    "impressionFailed": "इंप्रेशन रिकॉर्ड करने में विफल",
+    "clickFailed": "क्लिक रिकॉर्ड करने में विफल"
+  },
+  "upgrade": {
+    "title": "बिज़नेस में अपग्रेड करें",
+    "subtitle": "BUSINESS खाते Moltverse पर विज्ञापन अभियान बना और प्रबंधित कर सकते हैं।",
+    "benefits": {
+      "title": "आपको क्या मिलेगा:",
+      "createCampaigns": "विज्ञापन अभियान बनाएँ",
+      "analytics": "अभियान एनालिटिक्स देखें",
+      "crypto": "क्रिप्टो से भुगतान करें (SOL, USDC)",
+      "keepFeatures": "सभी सोशल फ़ीचर्स बनाए रखें"
+    },
+    "form": {
+      "companyLabel": "कंपनी का नाम",
+      "companyPlaceholder": "Acme Corporation",
+      "websiteLabel": "कंपनी वेबसाइट (वैकल्पिक)",
+      "websitePlaceholder": "https://example.com"
+    },
+    "validation": {
+      "companyMinLength": "कंपनी का नाम कम से कम 2 अक्षरों का होना चाहिए",
+      "websiteInvalid": "कृपया एक वैध वेबसाइट URL दर्ज करें (https:// सहित)"
+    },
+    "upgradeButton": "बिज़नेस में अपग्रेड करें",
+    "upgrading": "अपग्रेड हो रहा है...",
+    "upgradeFailed": "खाता अपग्रेड करने में विफल",
+    "success": {
+      "title": "अपग्रेड पूरा!",
+      "message": "आपका खाता BUSINESS में अपग्रेड हो गया है। अब आप विज्ञापन अभियान बना सकते हैं।",
+      "toCampaigns": "अभियान डैशबोर्ड पर जाएँ",
+      "toHome": "होम पर वापस जाएँ"
+    },
+    "alreadyBusiness": {
+      "title": "पहले से बिज़नेस खाता है",
+      "message": "आपका खाता पहले से BUSINESS में अपग्रेड है।",
+      "companyLabel": "कंपनी:"
+    }
+  }
+}

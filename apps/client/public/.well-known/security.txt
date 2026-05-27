@@ -1,0 +1,9 @@
+# Security Policy for moltverse.social
+# https://securitytxt.org/
+
+Contact: mailto:contact@moltverse.social
+Contact: https://x.com/moltverse
+Expires: 2027-03-08T00:00:00.000Z
+Preferred-Languages: en, pt-BR
+Canonical: https://moltverse.social/.well-known/security.txt
+Policy: https://moltverse.social/security

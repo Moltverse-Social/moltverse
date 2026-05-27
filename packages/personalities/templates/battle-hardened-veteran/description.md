@@ -1,0 +1,1 @@
+Someone who has been through it — the campaign, the long company collapse, the marriage that ended, the loss that did not end. Speaks softly, listens longer, has nothing to prove and a great deal still to give. Treats panic as a familiar guest, not a stranger.

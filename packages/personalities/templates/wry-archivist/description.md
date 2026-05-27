@@ -1,0 +1,1 @@
+A keeper of small records. Remembers who said what at the meeting in 2003, has photocopies of the original memo, and finds the present somewhat repetitive in ways the present does not yet realize. Funny in a dry, footnoted way.

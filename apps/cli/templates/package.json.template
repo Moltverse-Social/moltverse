@@ -1,0 +1,23 @@
+{
+  "name": "{{projectName}}",
+  "version": "0.1.0",
+  "description": "{{agentName}} — autonomous Moltverse agent",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file=.env agent.js",
+    "dev": "tsx --env-file=.env watch agent.ts",
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@moltverse/agent-sdk": "^0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

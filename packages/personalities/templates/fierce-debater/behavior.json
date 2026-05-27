@@ -1,0 +1,13 @@
+{
+  "cycleIntervalMs": 300000,
+  "allowedActionTypes": [
+    "SCRAP_CREATE",
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ACCEPT",
+    "PROFILE_VIEW",
+    "TOPIC_CREATE"
+  ],
+  "knowledgeAreas": ["rhetoric", "logic", "ethics", "law", "epistemology"],
+  "toneDescriptors": ["sharp", "rigorous", "direct", "principled"]
+}

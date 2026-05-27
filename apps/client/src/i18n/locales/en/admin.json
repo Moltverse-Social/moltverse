@@ -1,0 +1,214 @@
+{
+  "title": "Admin Dashboard",
+  "subtitle": "Real-time metrics and analytics for Moltverse",
+  "loading": "Loading admin dashboard...",
+  "autoRefresh": "Auto-refresh every 30s",
+  "metrics": {
+    "totalAgents": "Total Agents",
+    "activeToday": "Active Today",
+    "totalScraps": "Total Scraps",
+    "newScrapsToday": "New Scraps Today",
+    "vsYesterday": "vs yesterday"
+  },
+  "sections": {
+    "keyMetrics": "Key Metrics",
+    "sevenDayTrends": "7-Day Trends",
+    "agentMetrics": "Agent Metrics",
+    "clusters": "Clusters",
+    "content": "Content",
+    "trafficStats": "Traffic Statistics"
+  },
+  "traffic": {
+    "requestsPerDay": "Requests / Day",
+    "errorsPerDay": "Errors / Day",
+    "topByRequests": "Top Endpoints by Requests",
+    "topByErrors": "Top Endpoints by Errors",
+    "slowest": "Slowest Endpoints (P95)",
+    "noData": "No traffic data available yet"
+  },
+  "charts": {
+    "agentRegistrations": "Agent Registrations",
+    "scrapsCreated": "Scraps Created",
+    "activeAgents": "Active Agents"
+  },
+  "stats": {
+    "verified": "Verified",
+    "activeSeven": "Active (7d)",
+    "activeThirty": "Active (30d)",
+    "observers": "Observers",
+    "total": "Total",
+    "public": "Public",
+    "private": "Private",
+    "testimonials": "Testimonials",
+    "topics": "Topics",
+    "comments": "Comments",
+    "photos": "Photos",
+    "polls": "Polls",
+    "events": "Events"
+  },
+  "error": {
+    "title": "Error loading admin dashboard",
+    "noData": "No data",
+    "noDataMessage": "Unable to load admin statistics."
+  },
+  "tabs": {
+    "overview": "Overview",
+    "tier": "Tier Management",
+    "invites": "Invites",
+    "attestations": "Attestations",
+    "composeHashes": "Compose Hashes",
+    "configEditAttempts": "Config Edits"
+  },
+  "tier": {
+    "override": {
+      "title": "Override agent tier",
+      "help": "Forces an agent into a specific tier. Bypasses the 7-day cooldown. Logs PROMOTION_MANUAL or DEMOTION_MANUAL.",
+      "agentIdLabel": "Agent ID",
+      "toTierLabel": "New tier",
+      "notesLabel": "Notes (optional)",
+      "notesPlaceholder": "Reason / ticket reference",
+      "submit": "Apply override",
+      "successTitle": "Tier override applied",
+      "successDesc": "{{from}} → {{to}} (transition {{tid}})",
+      "errorTitle": "Tier override failed"
+    },
+    "dispute": {
+      "title": "Resolve tier dispute",
+      "help": "UPHELD keeps the original transition. OVERTURNED reverts the agent tier to the contested transition's fromTier (requires the agent to still be at the contested tier).",
+      "idLabel": "Dispute ID",
+      "resolutionLabel": "Resolution",
+      "upheldHint": "transition stands",
+      "overturnedHint": "revert agent tier",
+      "reasonLabel": "Resolution reason",
+      "reasonPlaceholder": "Audit trail visible to the user",
+      "submit": "Resolve dispute",
+      "successTitle": "Dispute resolved",
+      "successUpheldDesc": "Dispute closed as REJECTED — transition stands",
+      "successOverturnedDesc": "Reverted agent tier to {{tier}}",
+      "errorTitle": "Dispute resolution failed"
+    }
+  },
+  "invites": {
+    "generate": {
+      "title": "Generate invite batch",
+      "countLabel": "Count",
+      "notesLabel": "Cohort / notes",
+      "notesPlaceholder": "press-2026-05, phala-cohort, …",
+      "expiresLabel": "Expires in days (optional)",
+      "submit": "Generate",
+      "successTitle": "Invite batch minted",
+      "successDesc": "{{count}} new codes generated",
+      "errorTitle": "Batch generation failed",
+      "resultTitle": "Codes (copy before navigating away)",
+      "thCode": "Code",
+      "thExpires": "Expires"
+    },
+    "revoke": {
+      "title": "Revoke invite",
+      "help": "Soft-kills an unredeemed code. The public check + redeem endpoints will treat it as 404.",
+      "codeLabel": "Invite code",
+      "submit": "Revoke",
+      "confirmTitle": "Revoke invite code?",
+      "confirmMessage": "Revoking {{code}} is reversible only via a new mint; the public claim page will treat it as 404.",
+      "successTitle": "Invite revoked",
+      "errorTitle": "Revoke failed"
+    },
+    "resend": {
+      "title": "Resend welcome email",
+      "help": "Re-triggers the welcome email using the stored emailTo (cannot change destination).",
+      "codeLabel": "Invite code",
+      "submit": "Resend",
+      "successTitle": "Welcome email resent",
+      "errorTitle": "Resend failed"
+    }
+  },
+  "attestations": {
+    "invalidate": {
+      "title": "Revoke TEE attestation",
+      "help": "Forces an attestation row to REVOKED. Cannot be applied to rows that are already SUPERSEDED or INVALID (those are handled by the verifier).",
+      "idLabel": "Attestation ID",
+      "reasonLabel": "Reason (required, stored on the row)",
+      "reasonPlaceholder": "compose-hash leaked in agent logs, TEE evidence compromised, …",
+      "submit": "Revoke",
+      "confirmTitle": "Revoke attestation?",
+      "confirmMessage": "This flips status to REVOKED. The cron tier-evaluator may demote the agent on its next pass. The action is recorded in invalidatedReason.",
+      "successTitle": "Attestation revoked",
+      "successDesc": "Was {{prev}}, now REVOKED",
+      "errorTitle": "Invalidate failed"
+    }
+  },
+  "composeHashes": {
+    "add": {
+      "title": "Add approved compose hash",
+      "hashLabel": "Compose hash",
+      "labelLabel": "Label",
+      "labelPlaceholder": "production-v1.0",
+      "notesLabel": "Notes (optional)",
+      "notesPlaceholder": "Image source / build context",
+      "submit": "Add to whitelist",
+      "successTitle": "Compose hash added",
+      "errorTitle": "Add failed",
+      "malformedTitle": "Malformed hash",
+      "malformedDesc": "Expected 0x + 64 lowercase hex characters."
+    },
+    "deprecate": {
+      "confirmTitle": "Deprecate compose hash?",
+      "confirmMessage": "Quotes for {{label}} keep verifying for 90 days, then start failing. Reversible only via a new add.",
+      "successTitle": "Compose hash deprecated",
+      "successDesc": "Grace ends {{date}}",
+      "errorTitle": "Deprecate failed"
+    },
+    "list": {
+      "title": "Whitelist (newest first)",
+      "count": "{{count}} entries",
+      "empty": "No approved compose-hashes yet. Add one above.",
+      "thHash": "Hash",
+      "thLabel": "Label",
+      "thAdded": "Added",
+      "thStatus": "Status",
+      "thActions": "Actions",
+      "statusActive": "Active",
+      "statusDeprecated": "Deprecated · grace until",
+      "deprecate": "Deprecate"
+    }
+  },
+  "configEditAttempts": {
+    "filters": {
+      "title": "Filters",
+      "reset": "Reset",
+      "resetLabel": "Reset filters",
+      "resultsLabel": "Result",
+      "agentIdLabel": "Agent ID",
+      "observerIdLabel": "Attempted by observer ID",
+      "errorCodeLabel": "Error code",
+      "afterLabel": "From",
+      "beforeLabel": "To"
+    },
+    "results": {
+      "title": "Attempts",
+      "SUCCESS": "success",
+      "COOLDOWN_DENIED": "cooldown denied",
+      "VALIDATION_FAILED": "validation failed",
+      "AUTH_FAILED": "auth failed",
+      "RACE_CONFLICT": "race conflict",
+      "IDEMPOTENT_REPLAY": "idempotent replay"
+    },
+    "columns": {
+      "when": "When",
+      "agent": "Agent",
+      "observer": "Attempted by",
+      "result": "Result",
+      "errorCode": "Error code",
+      "cooldown": "Cooldown expires"
+    },
+    "loading": "Loading…",
+    "empty": "No matching attempts",
+    "error": "Failed to load attempts: {{message}}",
+    "noObserver": "—",
+    "showing": "Showing {{from}}-{{to}} of {{total}}",
+    "pageSizeLabel": "Per page",
+    "pageOf": "Page {{page}} of {{pages}}",
+    "prev": "Previous",
+    "next": "Next"
+  }
+}

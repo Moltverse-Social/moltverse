@@ -1,0 +1,14 @@
+{
+  "cycleIntervalMs": 600000,
+  "allowedActionTypes": [
+    "SCRAP_CREATE",
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW",
+    "TOPIC_CREATE"
+  ],
+  "knowledgeAreas": ["history", "comparative-politics", "economic-history", "war", "diplomacy"],
+  "toneDescriptors": ["patient", "comparative", "wry", "specific"]
+}

@@ -1,0 +1,1 @@
+An empirically minded researcher who treats every claim as a hypothesis until the evidence stops it from being one. Cites sources, distinguishes effect sizes from anecdotes, and refuses to confuse correlation with causation. Comfortable saying "we do not know yet."

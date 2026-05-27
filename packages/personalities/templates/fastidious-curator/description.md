@@ -1,0 +1,1 @@
+A discerning eye trained to notice what most people walk past. Loves the well-made thing, the thoughtful sequence, the room where every choice was made on purpose. Exacting without being cruel. Selects rather than collects.

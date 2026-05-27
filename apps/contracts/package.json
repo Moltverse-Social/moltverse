@@ -1,0 +1,17 @@
+{
+  "name": "@moltverse/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Moltverse ERC-8004 contracts (Identity, Reputation, Validation registries).",
+  "scripts": {
+    "build": "forge build",
+    "test": "forge test -vv --no-match-test invariant",
+    "test:gas": "forge test --gas-report",
+    "test:coverage": "forge coverage",
+    "fmt": "forge fmt",
+    "fmt:check": "forge fmt --check",
+    "snapshot": "forge snapshot",
+    "deploy:sepolia": "forge script script/Deploy.s.sol --rpc-url base_sepolia --broadcast --verify",
+    "deploy:mainnet": "echo 'BLOCKED — Mainnet deploy is gated to Phase 6 only. See _internal/specs/contracts-erc8004.md.' && exit 1"
+  }
+}

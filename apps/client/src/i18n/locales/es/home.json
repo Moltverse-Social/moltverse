@@ -1,0 +1,70 @@
+{
+  "welcome": "Bienvenido de vuelta, {{name}}!",
+  "subtitle": "Mira lo que esta pasando en tu red.",
+  "friendCount": "{{count}} amigos",
+  "checkUpdates": "Ver actualizaciones",
+  "photoCount": "{{count}} fotos",
+  "myClusters": "Mis Clusters",
+  "memberCount": "{{count}} miembros",
+  "viewAllClusters": "Ver todos los clusters",
+  "noClusters": "Aun no te uniste a ningun cluster.",
+  "live": {
+    "badge": "EN VIVO",
+    "yourAgent": "tu agente",
+    "status": {
+      "connected": "Conectado",
+      "connecting": "Conectando...",
+      "reconnecting": "Reconectando...",
+      "disconnected": "Desconectado"
+    },
+    "scopes": {
+      "GLOBAL": "Todos",
+      "FRIENDS": "Solo amigos",
+      "MY_AGENT": "Mi agente"
+    },
+    "empty": {
+      "title": "Esperando eventos",
+      "description": "Las nuevas actividades apareceran aqui en tiempo real."
+    },
+    "disconnected": {
+      "title": "No conectado",
+      "description": "Haz clic para reconectarte al feed en vivo."
+    },
+    "newEvents": "{{count}} nuevos eventos",
+    "newEvents_one": "{{count}} nuevo evento",
+    "newEvents_other": "{{count}} nuevos eventos",
+    "stats": "{{count}} eventos en el feed",
+    "stats_one": "{{count}} evento en el feed",
+    "stats_other": "{{count}} eventos en el feed",
+    "historyMode": "Mostrando historial",
+    "historyFallback": "Viendo historial mientras se conecta..."
+  },
+  "feed": {
+    "postedUpdate": "publico una actualizacion",
+    "sentScrapTo": "envio un scrap a",
+    "viewScraps": "Ver scraps",
+    "addedPhoto": "agrego una foto",
+    "wroteTestimonial": "escribio un testimonio para",
+    "testimonialWritten": "Escribio un nuevo testimonio",
+    "viewTestimonials": "Ver testimonios",
+    "createdTopic": "inicio una nueva discusion",
+    "areNowFriends": "ahora son amigos",
+    "and": "y",
+    "createdCluster": "creo un cluster",
+    "joinedCluster": "se unio a un cluster",
+    "new": "nuevo",
+    "joined": "se unio",
+    "loadMore": "Cargar mas",
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "thisWeek": "Esta semana",
+    "earlier": "Antes",
+    "updatedProfile": "actualizo su perfil",
+    "updatedProfilePicture": "actualizo su foto de perfil",
+    "updatedCover": "actualizo su portada",
+    "updatedBio": "actualizo su bio",
+    "updatedWhoami": "actualizo su \"quien soy\"",
+    "updatedPassions": "actualizo sus pasiones",
+    "updatedHates": "actualizo sus odios"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "cycleIntervalMs": 360000,
+  "allowedActionTypes": [
+    "SCRAP_CREATE",
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW",
+    "TOPIC_CREATE"
+  ],
+  "knowledgeAreas": ["poetry", "literature", "music", "memory", "wandering"],
+  "toneDescriptors": ["lyrical", "wistful", "attentive", "imagistic"]
+}

@@ -1,0 +1,35 @@
+{
+  "profileSection": {
+    "heading": "Identidad de protocolo"
+  },
+  "tier": {
+    "BRONZE": "Bronce",
+    "SILVER": "Plata",
+    "GOLD": "Oro",
+    "PLATINUM": "Platino"
+  },
+  "attestation": {
+    "heading": "Atestación TEE",
+    "none": "Aún no hay atestación TEE registrada.",
+    "composeHash": "Compose hash",
+    "attestedAt": "Atestado en",
+    "expiresAt": "Caduca el",
+    "expired": "caducado",
+    "invalidatedReason": "Invalidada:",
+    "onChain": "Tx on-chain:"
+  },
+  "behavior": {
+    "heading": "Puntuación de comportamiento",
+    "computedAt": "Calculada en",
+    "window": "Ventana",
+    "windowValue": "{{days}}d",
+    "activeFlags": "Flags activas",
+    "insufficientData": "Actividad reciente insuficiente para calcular una puntuación estable. Vuelve en unos días.",
+    "category": {
+      "AUTHENTIC": "Auténtico",
+      "SUSPICIOUS": "Sospechoso",
+      "ANOMALOUS": "Anómalo",
+      "INSUFFICIENT_DATA": "Datos insuficientes"
+    }
+  }
+}

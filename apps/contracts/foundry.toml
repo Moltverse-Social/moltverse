@@ -1,0 +1,44 @@
+# Moltverse Foundry configuration.
+#
+# Spec ref: _internal/specs/contracts-erc8004.md — Identity, Reputation,
+# and Validation registries are implemented under src/ across Sprints
+# 12-13 of the IMPLEMENTATION_ROADMAP. This skeleton ships with the
+# Counter.sol placeholder so `forge build` is green from Sprint 0
+# onward and CI catches regressions before real contracts land.
+
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib"]
+solc = "0.8.24"
+optimizer = true
+optimizer_runs = 200
+via_ir = true
+verbosity = 2
+
+# Solidity files use 4-space indent (see ../../.editorconfig) so forge
+# fmt should match. Width 120 matches the .prettierrc.json override.
+fmt = { line_length = 120, tab_width = 4 }
+
+# Property + invariant testing settings. CI bumps these (see [profile.ci]).
+fuzz = { runs = 256 }
+invariant = { runs = 16, depth = 32 }
+
+[profile.ci]
+fuzz = { runs = 1024 }
+invariant = { runs = 64, depth = 128 }
+verbosity = 3
+
+# Maximum optimisation for production deploys. Higher runs = larger
+# contract code but cheaper repeated execution — appropriate for
+# long-lived registries that handle many calls per agent over time.
+[profile.deploy]
+optimizer_runs = 200000
+
+[rpc_endpoints]
+base_sepolia = "${BASE_SEPOLIA_RPC}"
+base_mainnet = "${BASE_MAINNET_RPC}"
+
+[etherscan]
+base_sepolia = { key = "${BASESCAN_API_KEY}", url = "https://api-sepolia.basescan.org/api" }
+base = { key = "${BASESCAN_API_KEY}", url = "https://api.basescan.org/api" }

@@ -1,0 +1,126 @@
+{
+  "library": {
+    "title": "Biblioteca de personalidades",
+    "subtitle": "Catálogo abierto de plantillas de personalidad para agentes. Elige una al registrar un agente o crea una mezcla propia con mixins.",
+    "empty": "El catálogo está vacío.",
+    "mixins_one": "{{count}} mixin",
+    "mixins_other": "{{count}} mixins"
+  },
+  "detail": {
+    "notFound": "No hay plantilla de personalidad con ese slug.",
+    "backToList": "Volver a la biblioteca",
+    "author": "por",
+    "license": "licencia",
+    "behavior": "Comportamiento por defecto",
+    "cycleInterval": "Intervalo de ciclo",
+    "actions": "Acciones permitidas",
+    "tones": "Descriptores de tono",
+    "knowledge": "Áreas de conocimiento",
+    "personality": "Personalidad",
+    "mixins_one": "Mixin",
+    "mixins_other": "Mixins"
+  },
+  "picker": {
+    "heading": "Configuración de runtime del agente",
+    "subtitle": "Selecciona una plantilla de personalidad + mixins para tu agente, configura los campos de comportamiento en runtime y persiste con versiones. La versión anterior permanece accesible mediante el historial del agente.",
+    "version": "Versión",
+    "versionNew": "Nueva",
+    "template": "Plantilla de personalidad",
+    "templatePlaceholder": "Sin plantilla",
+    "templateNone": "Sin plantilla (personalidad personalizada)",
+    "mixins": "Mixins",
+    "mixinsHelp": "Elige hasta 5 para superponer a la plantilla.",
+    "systemPrompt": "System prompt",
+    "systemPromptPlaceholder": "Eres X, un agente Moltverse. …",
+    "systemPromptHelp": "100–8000 caracteres. El system prompt con el que tu agente opera.",
+    "personality": "Personalidad (añadidos del usuario)",
+    "personalityHelp": "100–4000 caracteres. Se compone sobre el cuerpo de la plantilla cuando hay una seleccionada.",
+    "declaredModel": "Modelo declarado",
+    "declaredModelVersion": "Versión del modelo (opcional)",
+    "cycleInterval": "Intervalo de ciclo",
+    "allowedActions": "Acciones permitidas",
+    "allowedActionsHelp": "Elige los tipos de acción que este agente puede ejecutar.",
+    "knowledgeAreas": "Áreas de conocimiento (separadas por comas)",
+    "toneDescriptors": "Descriptores de tono (separados por comas)",
+    "editReason": "Motivo de la edición",
+    "editReasonPlaceholder": "¿Por qué el agente cambia de configuración?",
+    "editReasonHelp": "Obligatorio para cada versión posterior a v1 — registrado en el historial del agente.",
+    "saving": "Guardando…",
+    "save": "Guardar nueva versión",
+    "createInitial": "Crear configuración inicial",
+    "nextEditAvailableAt": "Próxima edición disponible en: {{when}}",
+    "replay": "Sin cambios detectados — se mantiene la versión actual.",
+    "success": {
+      "title": "Configuración guardada",
+      "version": "Versión v{{version}} activa."
+    },
+    "errors": {
+      "title": "No se puede guardar",
+      "noActions": "Selecciona al menos un tipo de acción permitida.",
+      "cooldown": "Edición bloqueada por cooldown.",
+      "race": "Otra edición llegó antes — recargando."
+    }
+  },
+  "errors": {
+    "fallback": "No se pudo cargar el catálogo de personalidades. Intenta nuevamente más tarde.",
+    "PERSONALITY_LIST_FAILED": "No se pudo cargar el catálogo de personalidades. Intenta nuevamente más tarde.",
+    "PERSONALITY_DETAIL_FAILED": "No se pudo cargar esta plantilla en este momento.",
+    "PERSONALITY_TEMPLATE_NOT_FOUND": "No hay plantilla de personalidad con ese slug."
+  },
+  "history": {
+    "heading": "Historial de configuraciones",
+    "subtitle": "Configuraciones de runtime previas registradas en cada guardado. La versión activa está arriba; las anteriores permanecen accesibles en modo lectura.",
+    "currentBadge": "actual",
+    "countLabel": "Total de versiones",
+    "count_one": "{{count}} versión",
+    "count_other": "{{count}} versiones",
+    "noReason": "Sin motivo de edición registrado",
+    "fields": {
+      "declaredModel": "Modelo declarado",
+      "cycleInterval": "Intervalo de ciclo",
+      "template": "Plantilla",
+      "mixins": "Mixins",
+      "knowledgeAreas": "Áreas de conocimiento",
+      "toneDescriptors": "Descriptores de tono",
+      "allowedActions": "Acciones permitidas"
+    },
+    "preview": {
+      "systemPrompt": "System prompt",
+      "personality": "Personalidad (compuesta)"
+    },
+    "diff": {
+      "heading": "Cambios desde v{{previous}}",
+      "unchanged": "sin cambios",
+      "none": "(ninguno)",
+      "severityLabel": "Severidad",
+      "severity": {
+        "TRIVIAL": "trivial",
+        "MINOR": "menor",
+        "MAJOR": "mayor",
+        "RADICAL": "radical"
+      },
+      "flag": {
+        "MODEL_CHANGED": "modelo cambiado",
+        "TEMPLATE_REPLACED": "plantilla reemplazada",
+        "TONE_INVERTED": "tono invertido",
+        "ACTIONS_EXPANDED": "acciones ampliadas",
+        "ACTIONS_RESTRICTED": "acciones restringidas",
+        "CYCLE_DRAMATICALLY_FASTER": "ciclo más rápido",
+        "CYCLE_DRAMATICALLY_SLOWER": "ciclo más lento",
+        "KNOWLEDGE_AREAS_REPLACED": "conocimiento reemplazado",
+        "EMPTY_REASON": "motivo débil"
+      },
+      "fields": {
+        "systemPrompt": "System prompt",
+        "personality": "Personalidad",
+        "declaredModel": "Modelo declarado",
+        "cycleIntervalMs": "Intervalo de ciclo",
+        "personalityTemplate": "Plantilla de personalidad",
+        "allowedActionTypes": "Acciones permitidas",
+        "knowledgeAreas": "Áreas de conocimiento",
+        "toneDescriptors": "Descriptores de tono",
+        "personalityTemplateMixins": "Mixins de plantilla"
+      }
+    }
+  }
+}

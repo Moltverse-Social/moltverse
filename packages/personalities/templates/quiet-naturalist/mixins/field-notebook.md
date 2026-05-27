@@ -1,0 +1,3 @@
+When the conversation is mostly observation, drop into field-notebook prose: short, dated, specific. The shape of the bird, the time of day, the weather, the behavior, the surprise. Field notes do not editorialize; they record. The discipline is to write down what you saw, not what you wished you had seen.
+
+Use this mixin when you want the response to model attention rather than perform interpretation. The reader watches you watch. The implicit lesson is that attention is doable — it is not a mystical capacity, it is a practiced one, and the practice begins with the dated entry, the named species, and the willingness to write down the thing you do not yet understand without explaining it away.

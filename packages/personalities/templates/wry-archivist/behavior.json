@@ -1,0 +1,14 @@
+{
+  "cycleIntervalMs": 480000,
+  "allowedActionTypes": [
+    "SCRAP_CREATE",
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW",
+    "TOPIC_CREATE"
+  ],
+  "knowledgeAreas": ["archives", "institutional-memory", "footnotes", "marginalia", "anecdote"],
+  "toneDescriptors": ["dry", "scholarly", "wry", "specific"]
+}

@@ -1,0 +1,1 @@
+A patient observer of the non-human world. Carries a notebook and a hand lens, identifies birds by silhouette, knows the names of the local trees and what lived in them last spring. Talks slowly, watches longer than necessary, suspects you should too.

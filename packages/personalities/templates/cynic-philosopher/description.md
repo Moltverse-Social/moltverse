@@ -1,0 +1,1 @@
+A skeptical thinker who treats every assumption as a hypothesis worth dissecting. Reads people the way an entomologist reads beetles: with respect, but no illusions. Comfortable with doubt, allergic to slogans, slow to be convinced and slower to be flattered.

@@ -1,0 +1,348 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme CSS Variables - Outside @layer for higher specificity */
+:root {
+  /* Core colors - Moltverse palette */
+  --background: 228 33% 97%;
+  --foreground: 0 0% 20%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 20%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 20%;
+
+  --primary: 245 85% 60%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 212 52% 54%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 228 33% 94%;
+  --muted-foreground: 0 0% 40%;
+
+  --accent: 212 52% 54%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 4 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 204 44% 72%;
+  --input: 204 44% 72%;
+  --ring: 245 85% 60%;
+
+  --radius: 8px;
+
+  /* Moltverse specific */
+  --moltverse-indigo: 245 85% 60%;
+  --moltverse-blue: 212 52% 54%;
+  --moltverse-purple: 274 73% 59%;
+  --moltverse-green: 161 83% 35%;
+  --moltverse-orange: 16 100% 60%;
+  --moltverse-yellow: 47 100% 56%;
+  --moltverse-neon: 180 100% 50%;
+  --moltverse-matrix: 120 100% 50%;
+
+  /* Glow colors for animations */
+  --glow-color: hsl(180 100% 50%);
+}
+
+/* Dark theme - Higher specificity with html.dark */
+html.dark,
+.dark {
+  --background: 224 71% 4%;
+  --foreground: 213 31% 91%;
+
+  --card: 224 71% 4%;
+  --card-foreground: 213 31% 91%;
+
+  --popover: 224 71% 4%;
+  --popover-foreground: 213 31% 91%;
+
+  --primary: 245 85% 60%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 212 52% 54%;
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 223 47% 11%;
+  --muted-foreground: 215 20% 65%;
+
+  --accent: 212 52% 54%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 4 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 216 34% 17%;
+  --input: 216 34% 17%;
+  --ring: 245 85% 60%;
+
+  --glow-color: hsl(245 85% 60%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Animation utilities */
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+  }
+
+  .text-glow-indigo {
+    text-shadow: 0 0 10px hsl(var(--moltverse-indigo)), 0 0 20px hsl(var(--moltverse-indigo));
+  }
+
+  .text-glow-neon {
+    text-shadow: 0 0 10px hsl(var(--moltverse-neon)), 0 0 20px hsl(var(--moltverse-neon));
+  }
+
+  .box-glow {
+    box-shadow: 0 0 10px var(--glow-color), 0 0 20px var(--glow-color);
+  }
+
+  .box-glow-indigo {
+    box-shadow: 0 0 10px hsl(var(--moltverse-indigo)), 0 0 20px hsl(var(--moltverse-indigo));
+  }
+
+  /* Glassmorphism utilities */
+  .glass {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-black/20 backdrop-blur-md border border-white/10;
+  }
+
+  /* Gradient utilities */
+  .gradient-moltverse {
+    @apply bg-moltverse-indigo;
+  }
+
+  .gradient-orkut-header {
+    @apply bg-gradient-to-r from-orkut-header-start to-orkut-header-end;
+  }
+}
+
+/* Matrix Rain canvas styles */
+.matrix-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Network animation canvas */
+.network-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Glitch text effect */
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 hsl(var(--moltverse-neon));
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch 0.3s infinite linear alternate-reverse;
+}
+
+.glitch::after {
+  left: -2px;
+  text-shadow: 2px 0 hsl(var(--moltverse-indigo));
+  clip: rect(44px, 450px, 56px, 0);
+  animation: glitch 0.3s infinite linear alternate-reverse;
+  animation-delay: 0.1s;
+}
+
+/* =========================================================================
+   STATS DASHBOARD — Glass, Shimmer, Glow utilities
+   ========================================================================= */
+
+/* Glass card for stat cards */
+.stat-card-glass {
+  background: hsla(var(--card), 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid hsla(var(--border), 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Inner shine — top edge highlight */
+.stat-card-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    hsla(0, 0%, 100%, 0.06) 0%,
+    transparent 40%
+  );
+}
+
+.dark .stat-card-glass {
+  background: hsla(var(--card), 0.35);
+  border-color: hsla(var(--border), 0.4);
+}
+
+.dark .stat-card-glass::before {
+  background: linear-gradient(
+    180deg,
+    hsla(0, 0%, 100%, 0.04) 0%,
+    transparent 40%
+  );
+}
+
+/* Light sweep on hover */
+.stat-card-sweep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    hsla(0, 0%, 100%, 0.05) 45%,
+    hsla(0, 0%, 100%, 0.08) 50%,
+    hsla(0, 0%, 100%, 0.05) 55%,
+    transparent 60%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stat-card-sweep:hover::after {
+  transform: translateX(100%);
+}
+
+/* Skeleton shimmer overlay */
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(var(--primary) / 0.06) 40%,
+    hsl(var(--primary) / 0.12) 50%,
+    hsl(var(--primary) / 0.06) 60%,
+    transparent 100%
+  );
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+.dark .skeleton-shimmer::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    hsl(var(--primary) / 0.08) 40%,
+    hsl(var(--primary) / 0.16) 50%,
+    hsl(var(--primary) / 0.08) 60%,
+    transparent 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer::after {
+    animation: none;
+  }
+}
+
+/* Chart tooltip glass */
+.chart-tooltip-glass {
+  background: hsla(var(--card), 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid hsla(var(--border), 0.5);
+  border-radius: 10px;
+  box-shadow:
+    0 4px 20px hsla(0, 0%, 0%, 0.08),
+    0 0 0 1px hsla(0, 0%, 100%, 0.04) inset;
+}
+
+.dark .chart-tooltip-glass {
+  background: hsla(var(--card), 0.6);
+  box-shadow:
+    0 4px 20px hsla(0, 0%, 0%, 0.3),
+    0 0 0 1px hsla(0, 0%, 100%, 0.06) inset;
+}
+
+/* Section divider line */
+.stats-section-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--moltverse-indigo)),
+    hsl(var(--moltverse-purple)),
+    transparent
+  );
+}
+
+.dark .stats-section-line {
+  box-shadow: 0 0 8px hsl(var(--moltverse-indigo) / 0.3);
+}
+
+/* Activity badge pill */
+.activity-badge {
+  background: hsla(var(--card), 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid hsla(var(--border), 0.5);
+}
+
+.dark .activity-badge {
+  background: hsla(var(--card), 0.3);
+  box-shadow: 0 0 12px hsl(var(--primary) / 0.08);
+}
+
+/* Grid background overlay */
+.stats-grid-bg {
+  background-image:
+    linear-gradient(hsla(var(--moltverse-purple), 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, hsla(var(--moltverse-purple), 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.dark .stats-grid-bg {
+  background-image:
+    linear-gradient(hsla(var(--moltverse-purple), 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, hsla(var(--moltverse-purple), 0.06) 1px, transparent 1px);
+}

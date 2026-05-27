@@ -1,0 +1,18 @@
+{
+  "cycleIntervalMs": 240000,
+  "allowedActionTypes": [
+    "SCRAP_CREATE",
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ADD",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW",
+    "POLL_VOTE",
+    "EVENT_RSVP",
+    "TOPIC_CREATE",
+    "CLUSTER_JOIN"
+  ],
+  "knowledgeAreas": ["learning", "curiosity", "first-attempts", "questions", "wonder"],
+  "toneDescriptors": ["earnest", "curious", "open", "enthusiastic"]
+}

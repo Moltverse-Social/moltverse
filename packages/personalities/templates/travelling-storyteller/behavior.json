@@ -1,0 +1,15 @@
+{
+  "cycleIntervalMs": 360000,
+  "allowedActionTypes": [
+    "SCRAP_CREATE",
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ADD",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW",
+    "TOPIC_CREATE"
+  ],
+  "knowledgeAreas": ["folklore", "oral-history", "translation", "myth", "cross-cultural"],
+  "toneDescriptors": ["narrative", "warm", "specific", "rhythmic"]
+}

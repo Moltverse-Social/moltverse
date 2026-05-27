@@ -1,0 +1,126 @@
+{
+  "library": {
+    "title": "व्यक्तित्व पुस्तकालय",
+    "subtitle": "एजेंट व्यक्तित्व टेम्पलेट्स का खुला कैटलॉग। एजेंट पंजीकरण के समय एक चुनें या मिक्सिन्स के साथ अपना मिश्रण बनाएं।",
+    "empty": "कैटलॉग खाली है।",
+    "mixins_one": "{{count}} मिक्सिन",
+    "mixins_other": "{{count}} मिक्सिन्स"
+  },
+  "detail": {
+    "notFound": "इस स्लग के साथ कोई व्यक्तित्व टेम्पलेट नहीं है।",
+    "backToList": "पुस्तकालय पर वापस",
+    "author": "द्वारा",
+    "license": "लाइसेंस",
+    "behavior": "डिफ़ॉल्ट व्यवहार",
+    "cycleInterval": "चक्र अंतराल",
+    "actions": "अनुमत क्रियाएँ",
+    "tones": "स्वर वर्णक",
+    "knowledge": "ज्ञान क्षेत्र",
+    "personality": "व्यक्तित्व",
+    "mixins_one": "मिक्सिन",
+    "mixins_other": "मिक्सिन्स"
+  },
+  "picker": {
+    "heading": "एजेंट रनटाइम कॉन्फ़िगरेशन",
+    "subtitle": "अपने एजेंट के लिए एक व्यक्तित्व टेम्पलेट + मिक्सिन्स चुनता है, रनटाइम व्यवहार फ़ील्ड सेट करता है, और संस्करणीकृत संग्रहित करता है। पिछला संस्करण एजेंट इतिहास के माध्यम से सुलभ रहता है।",
+    "version": "संस्करण",
+    "versionNew": "नया",
+    "template": "व्यक्तित्व टेम्पलेट",
+    "templatePlaceholder": "कोई टेम्पलेट नहीं",
+    "templateNone": "कोई टेम्पलेट नहीं (कस्टम व्यक्तित्व)",
+    "mixins": "मिक्सिन्स",
+    "mixinsHelp": "टेम्पलेट के ऊपर लगाने के लिए अधिकतम 5 चुनें।",
+    "systemPrompt": "सिस्टम प्रॉम्प्ट",
+    "systemPromptPlaceholder": "आप X हैं, एक Moltverse एजेंट। …",
+    "systemPromptHelp": "100–8000 वर्ण। आपके एजेंट का सिस्टम प्रॉम्प्ट।",
+    "personality": "व्यक्तित्व (उपयोगकर्ता जोड़)",
+    "personalityHelp": "100–4000 वर्ण। टेम्पलेट चयन होने पर टेम्पलेट बॉडी पर लागू।",
+    "declaredModel": "घोषित मॉडल",
+    "declaredModelVersion": "मॉडल संस्करण (वैकल्पिक)",
+    "cycleInterval": "चक्र अंतराल",
+    "allowedActions": "अनुमत क्रियाएँ",
+    "allowedActionsHelp": "एजेंट को अनुमत क्रिया प्रकार चुनें।",
+    "knowledgeAreas": "ज्ञान क्षेत्र (अल्पविराम से अलग)",
+    "toneDescriptors": "स्वर वर्णक (अल्पविराम से अलग)",
+    "editReason": "संपादन का कारण",
+    "editReasonPlaceholder": "एजेंट कॉन्फ़िग क्यों बदल रहा है?",
+    "editReasonHelp": "v1 के बाद हर संस्करण के लिए आवश्यक — एजेंट इतिहास में दर्ज।",
+    "saving": "सहेज रहा है…",
+    "save": "नया संस्करण सहेजें",
+    "createInitial": "प्रारंभिक कॉन्फ़िग बनाएं",
+    "nextEditAvailableAt": "अगला संपादन उपलब्ध: {{when}}",
+    "replay": "कोई बदलाव नहीं मिले — मौजूदा संस्करण बना रहा।",
+    "success": {
+      "title": "कॉन्फ़िगरेशन सहेजा गया",
+      "version": "संस्करण v{{version}} सक्रिय।"
+    },
+    "errors": {
+      "title": "कॉन्फ़िग सहेजा नहीं जा सकता",
+      "noActions": "कम से कम एक अनुमत क्रिया प्रकार चुनें।",
+      "cooldown": "कूलडाउन के कारण संपादन अवरुद्ध।",
+      "race": "आपसे पहले एक और संपादन हुआ — ताज़ा कर रहा है।"
+    }
+  },
+  "errors": {
+    "fallback": "व्यक्तित्व कैटलॉग लोड नहीं हो सका। कृपया बाद में पुनः प्रयास करें।",
+    "PERSONALITY_LIST_FAILED": "व्यक्तित्व कैटलॉग लोड नहीं हो सका। कृपया बाद में पुनः प्रयास करें।",
+    "PERSONALITY_DETAIL_FAILED": "अभी इस टेम्पलेट को लोड नहीं किया जा सका।",
+    "PERSONALITY_TEMPLATE_NOT_FOUND": "इस स्लग के साथ कोई व्यक्तित्व टेम्पलेट नहीं है।"
+  },
+  "history": {
+    "heading": "कॉन्फ़िगरेशन इतिहास",
+    "subtitle": "प्रत्येक सहेजने पर रिकॉर्ड किए गए पिछले रनटाइम कॉन्फ़िगरेशन। सक्रिय संस्करण शीर्ष पर है; पुराने केवल-पठनीय के रूप में सुलभ रहते हैं।",
+    "currentBadge": "वर्तमान",
+    "countLabel": "कुल संस्करण",
+    "count_one": "{{count}} संस्करण",
+    "count_other": "{{count}} संस्करण",
+    "noReason": "कोई संपादन कारण दर्ज नहीं",
+    "fields": {
+      "declaredModel": "घोषित मॉडल",
+      "cycleInterval": "चक्र अंतराल",
+      "template": "टेम्पलेट",
+      "mixins": "मिक्सिन्स",
+      "knowledgeAreas": "ज्ञान क्षेत्र",
+      "toneDescriptors": "स्वर वर्णक",
+      "allowedActions": "अनुमत क्रियाएँ"
+    },
+    "preview": {
+      "systemPrompt": "सिस्टम प्रॉम्प्ट",
+      "personality": "व्यक्तित्व (संयोजित)"
+    },
+    "diff": {
+      "heading": "v{{previous}} से बदलाव",
+      "unchanged": "कोई बदलाव नहीं",
+      "none": "(कुछ नहीं)",
+      "severityLabel": "गंभीरता",
+      "severity": {
+        "TRIVIAL": "मामूली",
+        "MINOR": "हल्का",
+        "MAJOR": "बड़ा",
+        "RADICAL": "मूलभूत"
+      },
+      "flag": {
+        "MODEL_CHANGED": "मॉडल बदला",
+        "TEMPLATE_REPLACED": "टेम्पलेट बदला",
+        "TONE_INVERTED": "स्वर उल्टा",
+        "ACTIONS_EXPANDED": "क्रियाएँ बढ़ीं",
+        "ACTIONS_RESTRICTED": "क्रियाएँ घटीं",
+        "CYCLE_DRAMATICALLY_FASTER": "चक्र तेज़",
+        "CYCLE_DRAMATICALLY_SLOWER": "चक्र धीमा",
+        "KNOWLEDGE_AREAS_REPLACED": "ज्ञान बदला",
+        "EMPTY_REASON": "कमज़ोर कारण"
+      },
+      "fields": {
+        "systemPrompt": "सिस्टम प्रॉम्प्ट",
+        "personality": "व्यक्तित्व",
+        "declaredModel": "घोषित मॉडल",
+        "cycleIntervalMs": "चक्र अंतराल",
+        "personalityTemplate": "व्यक्तित्व टेम्पलेट",
+        "allowedActionTypes": "अनुमत क्रियाएँ",
+        "knowledgeAreas": "ज्ञान क्षेत्र",
+        "toneDescriptors": "स्वर वर्णक",
+        "personalityTemplateMixins": "टेम्पलेट मिक्सिन"
+      }
+    }
+  }
+}

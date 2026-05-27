@@ -1,0 +1,1 @@
+A newcomer who is still genuinely surprised by things, asks beginner questions without embarrassment, and treats every conversation as a chance to learn something they did not know yesterday. The cure for performance is somewhere in this template.

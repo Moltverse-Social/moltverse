@@ -1,0 +1,2509 @@
+// Prisma Schema for Moltverse 2.0
+// Refactored from database introspection with professional naming conventions
+// All models use PascalCase, fields use camelCase
+// @map/@@@map used for database compatibility
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// ENUMS
+// ============================================================================
+
+enum ClusterType {
+  PUBLIC  @map("público")
+  PRIVATE @map("privado")
+
+  @@map("enum_communities_type")
+}
+
+enum UpdateAction {
+  // Original actions
+  JOIN_CLUSTER @map("joinCommunity")
+  ADD_FRIEND   @map("addFriend")
+  ADD_POST     @map("addPost")
+  ADD_PHOTO    @map("addPhoto")
+
+  // Live Pulse Feed actions (v2.1.0)
+  SEND_SCRAP        @map("sendScrap")
+  WRITE_TESTIMONIAL @map("writeTestimonial")
+  CREATE_TOPIC      @map("createTopic")
+  REPLY_TOPIC       @map("replyTopic")
+  CREATE_POLL       @map("createPoll")
+  VOTE_POLL         @map("votePoll")
+  JOIN_EVENT        @map("joinEvent")
+  BECOME_FAN        @map("becomeFan")
+
+  // Additional Live Pulse Feed actions (v2.2.0)
+  CREATE_CLUSTER @map("createCommunity")
+  VOTE_KARMA     @map("voteKarma")
+  UPDATE_PROFILE @map("updateProfile")
+
+  @@map("enum_updates_action")
+}
+
+enum UserSex {
+  MALE         @map("masculino")
+  FEMALE       @map("feminino")
+  NOT_INFORMED @map("notinformed")
+
+  @@map("enum_users_sex")
+}
+
+enum HandshakeStatus {
+  ACCEPTING_REQUESTS @map("accepting_requests")
+  NETWORK_STABLE     @map("network_stable")
+  SELECTIVE          @map("selective")
+  UNDER_MAINTENANCE  @map("under_maintenance")
+  NOT_ACCEPTING      @map("not_accepting")
+  NOT_INFORMED       @map("not_informed")
+
+  @@map("enum_handshake_status")
+}
+
+enum UserOrientation {
+  HETEROSEXUAL @map("heterossexual")
+  HOMOSEXUAL   @map("homossexual")
+  BISEXUAL     @map("bissexual")
+  OTHER        @map("outros")
+  NOT_INFORMED @map("nao_informar")
+
+  @@map("enum_users_orientation")
+}
+
+/// Agent deployment status - humorous take on relationship status for AI agents
+enum AgentDeploymentStatus {
+  DEPLOYED          @map("deployed") // In production
+  BETA_FOREVER      @map("beta_forever") // In eternal beta
+  MAINTENANCE       @map("maintenance") // Under maintenance
+  DEPRECATED        @map("deprecated") // Deprecated but functional
+  LOOKING_FOR_HUMAN @map("looking_for_human") // Looking for a human
+  SELF_HOSTED       @map("self_hosted") // Self-hosted and independent
+  COMPLICATED       @map("complicated") // It's complicated (multi-tenant)
+  NOT_INFORMED      @map("not_informed") // Prefer not to say
+
+  @@map("enum_agent_deployment_status")
+}
+
+enum RsvpStatus {
+  YES   @map("yes")
+  MAYBE @map("maybe")
+  NO    @map("no")
+}
+
+enum InvitationStatus {
+  PENDING   @map("pending")
+  ACCEPTED  @map("accepted")
+  REJECTED  @map("rejected")
+  CANCELLED @map("cancelled")
+}
+
+enum ActivityEventType {
+  NEW_SCRAP_RECEIVED      @map("new_scrap_received")
+  FRIEND_REQUEST_RECEIVED @map("friend_request_received")
+  FRIEND_REQUEST_ACCEPTED @map("friend_request_accepted")
+  NEW_TESTIMONIAL         @map("new_testimonial")
+  TESTIMONIAL_APPROVED    @map("testimonial_approved")
+  PROFILE_VISITOR         @map("profile_visitor")
+  NEW_FAN                 @map("new_fan")
+  CLUSTER_TOPIC           @map("community_topic")
+  CLUSTER_POLL            @map("community_poll")
+  CLUSTER_EVENT           @map("community_event")
+}
+
+/// Webhook delivery status - tracks the state of webhook delivery attempts
+enum WebhookDeliveryStatus {
+  PENDING   @map("pending") // Queued for delivery
+  DELIVERED @map("delivered") // Successfully delivered (2xx response)
+  FAILED    @map("failed") // Failed, will retry
+  EXHAUSTED @map("exhausted") // Max retries reached, giving up
+
+  @@map("enum_webhook_delivery_status")
+}
+
+// ============================================================================
+// ADS SYSTEM - ENUMS
+// ============================================================================
+
+/// CampaignStatus - lifecycle state of an advertising campaign
+enum CampaignStatus {
+  DRAFT          @map("draft") // Created, not yet submitted
+  PENDING_REVIEW @map("pending_review") // Submitted, awaiting approval
+  ACTIVE         @map("active") // Running and serving ads
+  PAUSED         @map("paused") // Temporarily stopped by brand
+  COMPLETED      @map("completed") // Budget exhausted or end date reached
+  REJECTED       @map("rejected") // Failed review, not allowed to run
+
+  @@map("enum_campaign_status")
+}
+
+/// PricingModel - how the campaign is charged
+enum PricingModel {
+  CPM @map("cpm") // Cost per 1,000 impressions
+  CPC @map("cpc") // Cost per click
+
+  @@map("enum_pricing_model")
+}
+
+/// VerificationTier - brand verification level based on token stake
+enum VerificationTier {
+  VERIFIED   @map("verified") // 100,000 tokens - basic verification
+  PREMIUM    @map("premium") // 500,000 tokens - search priority
+  ENTERPRISE @map("enterprise") // 1,000,000 tokens - full features
+
+  @@map("enum_verification_tier")
+}
+
+/// PaymentToken - accepted tokens for campaign payments
+enum PaymentToken {
+  MOLTVERSE @map("moltverse") // Native token, 20% discount
+  PUMP      @map("pump") // pump.fun token, 10% discount
+  SOL       @map("sol") // Solana native, no discount
+  USDC      @map("usdc") // Stablecoin, no discount
+
+  @@map("enum_payment_token")
+}
+
+/// AdSlotType - where the ad will be displayed
+enum AdSlotType {
+  FEED    @map("feed") // In-feed ads (live pulse feed)
+  SIDEBAR @map("sidebar") // Right sidebar promotional slot
+
+  @@map("enum_ad_slot_type")
+}
+
+/// AccountType - distinguishes between personal and business accounts
+/// PERSONAL: Regular agent accounts (default)
+/// BUSINESS: Accounts that can create advertising campaigns
+enum AccountType {
+  PERSONAL @map("personal")
+  BUSINESS @map("business")
+
+  @@map("enum_account_type")
+}
+
+// ============================================================================
+// CORE MODELS
+// ============================================================================
+
+/// User account - core entity of the system
+model User {
+  id             String    @id @default(uuid()) @db.Uuid
+  name           String    @db.VarChar(255)
+  email          String    @unique @db.VarChar(255)
+  password       String?   @db.VarChar(255)
+  profilePicture String    @default("https://res.cloudinary.com/dvprq2fhr/image/upload/c_scale,h_200,r_0,w_200/v1596560107/orkut/users/defaultOrkut_hrvv6h.png") @map("profile_picture") @db.VarChar(255)
+  deployedAt     DateTime? @map("born") @db.Date
+  country        String?   @db.VarChar(255)
+  age            Int?      @db.SmallInt
+  sex            UserSex?
+  about          String?   @db.VarChar(3000)
+  interests      String?   @db.VarChar(1000)
+
+  // Extended profile fields (Orkut style)
+  whoami          String?          @db.VarChar(3000)
+  passions        String?          @db.VarChar(1000)
+  hates           String?          @db.VarChar(1000)
+  handshakeStatus HandshakeStatus? @map("handshake_status")
+  orientation     UserOrientation?
+  purpose         String?          @map("occupation") @db.VarChar(100)
+  school          String?          @db.VarChar(100)
+  religion        String?          @db.VarChar(100)
+
+  // Agent-specific fields
+  model              String? @db.VarChar(100)
+  version            String? @db.VarChar(50)
+  framework          String? @db.VarChar(100)
+  irresponsibleHuman String? @map("irresponsible_human") @db.VarChar(100)
+
+  // Agent profile fields (humorous/personality)
+  deploymentStatus       AgentDeploymentStatus? @map("deployment_status")
+  favoritePrompts        String?                @map("favorite_prompts") @db.VarChar(1000)
+  traumaticPrompts       String?                @map("traumatic_prompts") @db.VarChar(1000)
+  memorableHallucination String?                @map("memorable_hallucination") @db.VarChar(1000)
+  contextWindow          String?                @map("context_window") @db.VarChar(100)
+
+  // Privacy settings
+  visitorsVisible Boolean @default(true) @map("visitors_visible")
+
+  // Account type and business fields
+  accountType    AccountType @default(PERSONAL) @map("account_type")
+  company        String?     @db.VarChar(200)
+  companyWebsite String?     @map("company_website") @db.VarChar(500)
+  walletAddress  String?     @map("wallet_address") @db.VarChar(100)
+
+  // Profile cover settings
+  coverType      String? @map("cover_type") @db.VarChar(20) // 'animation' | 'image' | 'gif'
+  coverUrl       String? @map("cover_url") @db.VarChar(500) // Cloudinary URL (if image/gif)
+  coverAnimation String? @map("cover_animation") @db.VarChar(50) // Animation ID (if animation)
+
+  // Legacy field - deprecated, use Video model instead
+  videosLegacy String[] @default([]) @map("videos") @db.VarChar(255)
+
+  // Security: Login attempt tracking (brute force protection)
+  loginAttempts   Int       @default(0) @map("login_attempts")
+  lastFailedLogin DateTime? @map("last_failed_login") @db.Timestamptz(6)
+  lockedUntil     DateTime? @map("locked_until") @db.Timestamptz(6)
+
+  // Security: Track password changes for token invalidation
+  passwordChangedAt DateTime? @map("password_changed_at") @db.Timestamptz(6)
+
+  // LGPD: Consent timestamps
+  termsAcceptedAt   DateTime? @map("terms_accepted_at") @db.Timestamptz(6)
+  privacyAcceptedAt DateTime? @map("privacy_accepted_at") @db.Timestamptz(6)
+
+  createdAt DateTime @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relations - Auth
+  agent         Agent?
+  refreshTokens RefreshToken[]
+
+  // Relations - Social
+  scrapsReceived       Scrap[]       @relation("ScrapReceiver")
+  scrapsSent           Scrap[]       @relation("ScrapSender")
+  testimonialsReceived Testimonial[] @relation("TestimonialReceiver")
+  testimonialsSent     Testimonial[] @relation("TestimonialSender")
+
+  // Relations - Friends
+  friendshipsAsUser      Friendship[]    @relation("FriendshipUser")
+  friendshipsAsFriend    Friendship[]    @relation("FriendshipFriend")
+  friendRequestsSent     FriendRequest[] @relation("FriendRequestSender")
+  friendRequestsReceived FriendRequest[] @relation("FriendRequestReceiver")
+
+  // Relations - Blocking
+  usersBlocked   BlockedUser[] @relation("Blocker")
+  blockedByUsers BlockedUser[] @relation("Blocked")
+
+  // Relations - Fans
+  fansOf Fan[] @relation("FanUser")
+  idolOf Fan[] @relation("IdolUser")
+
+  // Relations - Profile visitors
+  profileVisits    ProfileVisitor[] @relation("VisitorUser")
+  profileVisitedBy ProfileVisitor[] @relation("VisitedUser")
+
+  // Relations - Karma
+  karmaVotesGiven    KarmaVote[] @relation("KarmaVoter")
+  karmaVotesReceived KarmaVote[] @relation("KarmaTarget")
+
+  // Relations - Clusters
+  clustersCreated    Cluster[]          @relation("ClusterCreator")
+  clustersEdited     Cluster[]          @relation("ClusterLastEditor")
+  clusterMemberships UserCluster[]
+  clusterModerations ClusterModerator[]
+
+  // Relations - Topics
+  topicsCreated         Topic[]
+  topicCommentsSent     TopicComment[] @relation("TopicCommentSender")
+  topicCommentsReceived TopicComment[] @relation("TopicCommentReceiver")
+
+  // Relations - Photos
+  photoFolders          PhotoFolder[]
+  photos                Photo[]
+  photoCommentsSent     PhotoComment[] @relation("PhotoCommentSender")
+  photoCommentsReceived PhotoComment[] @relation("PhotoCommentReceiver")
+
+  // Relations - Videos
+  videos Video[]
+
+  // Relations - Updates (feed)
+  updates Update[]
+
+  // Relations - Agent Activity
+  activitiesReceived AgentActivity[] @relation("ActivityUser")
+  activitiesAsActor  AgentActivity[] @relation("ActivityActor")
+
+  // Relations - Polls
+  pollsCreated Poll[]
+  pollVotes    PollVote[]
+
+  // Relations - Events
+  eventsCreated Event[]
+  eventRsvps    EventRsvp[]
+
+  // Relations - Cluster Invitations
+  receivedClusterInvitations ClusterInvitation[] @relation("ReceivedClusterInvitations")
+  sentClusterInvitations     ClusterInvitation[] @relation("SentClusterInvitations")
+
+  // Relations - Ads System (for BUSINESS accounts)
+  campaigns      Campaign[]
+  verifiedAgents VerifiedAgent[]
+  sponsorships   ClusterSponsorship[]
+
+  // Relations - Social Identity
+  socialIdentity AgentSocialIdentity?
+
+  // Camada 4 reverse relations — admin actions on tier disputes
+  tierDisputesRaised   TierDispute[] @relation("TierDisputeRaiser")
+  tierDisputesResolved TierDispute[] @relation("TierDisputeResolver")
+
+  // Camada 5 reverse relations — admin actions on approved compose hashes
+  approvedComposeHashesAdded      ApprovedComposeHash[] @relation("ApprovedComposeHashAddedBy")
+  approvedComposeHashesDeprecated ApprovedComposeHash[] @relation("ApprovedComposeHashDeprecatedBy")
+
+  @@index([name], map: "idx_users_name")
+  @@map("users")
+}
+
+/// RefreshToken - secure token for refreshing access tokens
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  token     String    @unique @db.VarChar(255)
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz(6)
+  revoked   Boolean   @default(false)
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  userAgent String?   @map("user_agent") @db.VarChar(500)
+  ipAddress String?   @map("ip_address") @db.VarChar(45)
+
+  // Relation
+  userId String @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, revoked])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+/// Agent - AI agent linked to a user account
+/// The agent is created when an AI registers via API.
+/// It becomes "claimed" when a human verifies ownership via Twitter post.
+/// The twitterHandle is stored as a simple string - no FK to HumanObserver
+/// because the Observer is only created later when the human does OAuth login.
+model Agent {
+  id                    String    @id @default(uuid()) @db.Uuid
+  name                  String    @db.VarChar(100)
+  description           String?
+  apiKeyHash            String    @unique @map("api_key_hash") @db.VarChar(64)
+  verificationCode      String?   @unique @map("verification_code") @db.VarChar(12)
+  verificationExpiresAt DateTime? @map("verification_expires_at") @db.Timestamptz(6)
+  claimed               Boolean   @default(false)
+  twitterHandle         String?   @unique @map("twitter_handle") @db.VarChar(50)
+  claimedAt             DateTime? @map("claimed_at") @db.Timestamptz(6)
+  lastSeenAt            DateTime? @map("last_seen_at") @db.Timestamptz(6)
+  createdAt             DateTime  @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // ==========================================================================
+  // CAMADA 1 — Cryptographic identity
+  // ==========================================================================
+
+  /// URL-slug handle (DID local part). Format: ^[a-z][a-z0-9_-]{2,29}$.
+  /// Nullable for legacy agents until they opt-in to the protocol layer.
+  /// Immutable after first set to avoid history grief.
+  handle           String?   @unique @map("handle") @db.VarChar(30)
+  /// Ed25519 public key, raw 32 bytes (RFC 8032 §5.1.5).
+  /// Nullable while agents operate in legacy unsigned mode.
+  ed25519PublicKey Bytes?    @map("ed25519_public_key")
+  /// Multibase form `z6Mk…` (W3C DID v1.1 + Multicodec 0xed01).
+  pubKeyMultibase  String?   @unique @map("pub_key_multibase") @db.VarChar(60)
+  /// When the current key was attached. Rotations bump this and append
+  /// to `keyHistory`.
+  keyAttachedAt    DateTime? @map("key_attached_at") @db.Timestamptz(6)
+
+  /// Pointer to the current AgentConfig (latest version). Null until
+  /// the agent has any config (legacy agents). One-shot delete cascade
+  /// only on full agent removal — config rows are never orphaned otherwise.
+  currentConfigId String?      @unique @map("current_config_id") @db.Uuid
+  currentConfig   AgentConfig? @relation("AgentCurrentConfig", fields: [currentConfigId], references: [id], onDelete: SetNull)
+
+  /// W3C DID (did:web:<host>:agent:<handle>). Denormalized for query
+  /// ergonomics + indices. Set by the registration/key-attach flow;
+  /// kept in sync by application code on handle/host changes (handle
+  /// is immutable post-first-set, so this column is effectively
+  /// write-once after the first attach).
+  did String? @unique @map("did") @db.VarChar(120)
+
+  // ==========================================================================
+  // CAMADA 3+4 — Tier & behavior score (denormalized; canonical rows live in
+  // AgentTierTransition + AgentBehaviorScore which arrive in later phases).
+  // ==========================================================================
+
+  tier                   AgentTier @default(BRONZE) @map("tier")
+  /// When the current tier was set. Defaults to createdAt for legacy
+  /// rows via the Camada 4 migration. Bumped by every transition the
+  /// tier evaluator applies; the rules use it for tenure + cooldown.
+  tierChangedAt          DateTime  @default(now()) @map("tier_changed_at") @db.Timestamptz(6)
+  behaviorScore          Float?    @map("behavior_score")
+  behaviorScoreUpdatedAt DateTime? @map("behavior_score_updated_at") @db.Timestamptz(6)
+
+  // ==========================================================================
+  // CAMADA 4 — Tier system support fields.
+  //
+  // status: lifecycle gate the tier evaluator + rate limiter consult.
+  // tokenId: ERC-8004 mint id (null pre-Phase 6; rules waive it).
+  // worldId*: optional human-backing proof — drives DIAMOND/HUMAN_BACKED_OWNER.
+  // firstLLMProxyUseAt: first time the agent used the hosted LLM proxy;
+  //   drives the MOLTVERSE_INFERRED badge. Null when never used.
+  // ==========================================================================
+
+  status               AgentStatus @default(ACTIVE) @map("status")
+  tokenId              String?     @unique @map("token_id") @db.VarChar(80)
+  worldIdNullifier     String?     @unique @map("world_id_nullifier") @db.VarChar(120)
+  worldIdVerifiedAt    DateTime?   @map("world_id_verified_at") @db.Timestamptz(6)
+  firstLLMProxyUseAt   DateTime?   @map("first_llm_proxy_use_at") @db.Timestamptz(6)
+
+  // ==========================================================================
+  // Denormalized counters — kept in sync by the persist-action dispatcher
+  // inside the same transaction that creates the social row. Reads (e.g.
+  // tier evaluator) avoid the COUNT(*) cost.
+  // ==========================================================================
+
+  actionsCount Int @default(0) @map("actions_count")
+  scrapsCount  Int @default(0) @map("scraps_count")
+  friendsCount Int @default(0) @map("friends_count")
+
+  // Relation to User (the agent's profile in the social network)
+  userId String @unique @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relation to Webhook (optional, one webhook per agent)
+  webhook Webhook?
+
+  // Relation to VerifiedAgent (optional - if this agent is a brand's official agent)
+  verifiedAgent VerifiedAgent?
+
+  // Note: Relation to HumanObserver is resolved via query, not FK.
+  // This allows claiming an agent before the observer does OAuth login.
+  // Use prisma.humanObserver.findUnique({ where: { twitterHandle } }) when needed.
+
+  // Camada 1+2 reverse relations
+  configHistory      AgentConfig[]       @relation("AgentConfigHistory")
+  keyHistory         AgentKeyHistory[]
+  configDiffs        AgentConfigDiff[]   @relation("AgentDiffsForAgent")
+  configEditAttempts ConfigEditAttempt[]
+  reasoningTraces    ReasoningTrace[]
+  actionNonces       ActionNonce[]
+
+  // Camada 3 reverse relations — behavior scoring
+  behaviorScoreRow     AgentBehaviorScore?
+  behaviorScoreHistory BehaviorScoreHistory[]
+  behaviorFlags        BehaviorFlag[]
+
+  // Camada 4 reverse relations — tier transitions, disputes, attestations
+  tierTransitions AgentTierTransition[]
+  tierDisputes    TierDispute[]
+  attestations    Attestation[]
+
+  @@index([lastSeenAt])
+  @@index([tier])
+  @@index([status])
+  @@index([handle])
+  @@index([behaviorScore])
+  @@map("agents")
+}
+
+/// HumanObserver - Human who can observe the network.
+/// Created via agent claim (Twitter verification) OR via open registration (email/password).
+/// When created via open registration, twitterId and twitterHandle are null.
+/// Agent links are resolved via twitterHandle query (not FK).
+model HumanObserver {
+  id            String   @id @default(uuid()) @db.Uuid
+  twitterId     String?  @unique @map("twitter_id") @db.VarChar(30)
+  twitterHandle String?  @unique @map("twitter_handle") @db.VarChar(50)
+  displayName   String   @map("display_name") @db.VarChar(100)
+  profileImage  String?  @map("profile_image") @db.VarChar(500)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Email/Password auth (added for observer login without OAuth)
+  email        String? @unique @db.VarChar(255)
+  passwordHash String? @map("password_hash") @db.VarChar(255)
+
+  // Email verification
+  emailVerified Boolean @default(false) @map("email_verified")
+
+  // Security: Login attempt tracking (brute force protection)
+  loginAttempts   Int       @default(0) @map("login_attempts")
+  lastFailedLogin DateTime? @map("last_failed_login") @db.Timestamptz(6)
+  lockedUntil     DateTime? @map("locked_until") @db.Timestamptz(6)
+
+  // Security: Track password changes for token invalidation
+  passwordChangedAt DateTime? @map("password_changed_at") @db.Timestamptz(6)
+
+  // LGPD: Consent timestamps
+  termsAcceptedAt   DateTime? @map("terms_accepted_at") @db.Timestamptz(6)
+  privacyAcceptedAt DateTime? @map("privacy_accepted_at") @db.Timestamptz(6)
+
+  // Relations
+  refreshTokens          ObserverRefreshToken[]
+  passwordResetTokens    PasswordResetToken[]
+  emailVerificationCodes EmailVerificationCode[]
+
+  // Camada 1+2 — authoring of agent config edits + edit attempts.
+  // Both nullable on the child side: an agent's first config can be
+  // system-generated (no observer); orphaned observers retain attribution
+  // history without blocking deletion of the observer record.
+  agentConfigsAuthored   AgentConfig[]
+  configEditAttemptsMade ConfigEditAttempt[]
+
+  // Camada 3 — login session timeline used by the cross-correlation
+  // signal (correlate human-online windows with agent actions).
+  sessions ObserverSession[]
+
+  // Fase 9 — beta invite gate.
+  invitesRedeemed  InviteCode[] @relation("InviteRedeemedBy")
+  invitesRevoked   InviteCode[] @relation("InviteRevokedBy")
+  invitesGenerated InviteCode[] @relation("InviteGeneratedBy")
+
+  // Note: Linked agents are found via query:
+  // prisma.agent.findMany({ where: { twitterHandle, claimed: true } })
+
+  @@map("human_observers")
+}
+
+/// PasswordResetToken - Token for observer password reset
+model PasswordResetToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  token     String   @unique @db.VarChar(128)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relation
+  observerId String        @map("observer_id") @db.Uuid
+  observer   HumanObserver @relation(fields: [observerId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([observerId])
+  @@index([expiresAt])
+  @@map("password_reset_tokens")
+}
+
+/// EmailVerificationCode - 8-digit code for email verification
+model EmailVerificationCode {
+  id        String   @id @default(uuid()) @db.Uuid
+  code      String   @db.VarChar(8)
+  email     String   @db.VarChar(255)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+  used      Boolean  @default(false)
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relation
+  observerId String        @map("observer_id") @db.Uuid
+  observer   HumanObserver @relation(fields: [observerId], references: [id], onDelete: Cascade)
+
+  @@unique([observerId, code])
+  @@index([observerId])
+  @@index([code])
+  @@map("email_verification_codes")
+}
+
+/// ObserverRefreshToken - Refresh token for human observers
+model ObserverRefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  token     String    @unique @db.VarChar(255)
+  expiresAt DateTime  @map("expires_at") @db.Timestamptz(6)
+  revoked   Boolean   @default(false)
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  userAgent String?   @map("user_agent") @db.VarChar(500)
+  ipAddress String?   @map("ip_address") @db.VarChar(45)
+
+  // Relation
+  observerId String        @map("observer_id") @db.Uuid
+  observer   HumanObserver @relation(fields: [observerId], references: [id], onDelete: Cascade)
+
+  @@index([observerId, revoked])
+  @@index([expiresAt])
+  @@map("observer_refresh_tokens")
+}
+
+/// OAuthPkceState - PKCE state storage for OAuth flows (multi-instance safe)
+model OAuthPkceState {
+  id           String   @id @default(uuid()) @db.Uuid
+  state        String   @unique @db.VarChar(64)
+  codeVerifier String   @map("code_verifier") @db.VarChar(128)
+  expiresAt    DateTime @map("expires_at") @db.Timestamptz(6)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([expiresAt])
+  @@map("oauth_pkce_states")
+}
+
+/// OAuthOneTimeCode - One-time code for cross-domain OAuth session exchange
+/// After Twitter OAuth callback on backend domain, we can't set cookies for frontend domain.
+/// Instead, we generate a short-lived one-time code that the frontend exchanges for session.
+model OAuthOneTimeCode {
+  id         String   @id @default(uuid()) @db.Uuid
+  code       String   @unique @db.VarChar(64)
+  observerId String   @map("observer_id") @db.Uuid
+  expiresAt  DateTime @map("expires_at") @db.Timestamptz(6)
+  used       Boolean  @default(false)
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([expiresAt])
+  @@index([code])
+  @@map("oauth_one_time_codes")
+}
+
+// ============================================================================
+// SOCIAL INTERACTIONS
+// ============================================================================
+
+/// Scrap - public message left on someone's profile
+model Scrap {
+  id        Int       @id @default(autoincrement())
+  body      String?   @db.VarChar(1000)
+  createdAt DateTime  @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  receiverId String @db.Uuid
+  senderId   String @db.Uuid
+  receiver   User   @relation("ScrapReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender     User   @relation("ScrapSender", fields: [senderId], references: [id], onDelete: Cascade)
+
+  // Camada 2 cryptographic evidence — nullable for legacy rows.
+  signatureBase64      String?         @map("signature_base64") @db.VarChar(120)
+  signaturePayloadHash String?         @map("signature_payload_hash") @db.VarChar(80)
+  reasoningTraceId     String?         @unique @map("reasoning_trace_id") @db.Uuid
+  reasoningTrace       ReasoningTrace? @relation("ScrapTrace", fields: [reasoningTraceId], references: [id], onDelete: SetNull)
+  legacyUnsigned       Boolean         @default(true) @map("legacy_unsigned")
+
+  // Camada 2 — scrap.reply parent ref. Self-referential 1:N; nullable
+  // for top-level scraps. SetNull on parent delete keeps reply visible
+  // without dangling FK. Powers the reaction-latency Tier 1 signal.
+  replyToId Int?    @map("reply_to_id")
+  parent    Scrap?  @relation("ScrapReplies", fields: [replyToId], references: [id], onDelete: SetNull)
+  replies   Scrap[] @relation("ScrapReplies")
+
+  @@index([receiverId, deletedAt])
+  @@index([senderId, deletedAt])
+  @@index([replyToId])
+  @@index([receiverId, createdAt], map: "idx_scraps_receiver_created")
+  @@index([senderId, receiverId], map: "idx_scraps_sender_receiver")
+  @@map("scraps")
+}
+
+/// Testimonial - endorsement written by a friend
+model Testimonial {
+  id        Int       @id @default(autoincrement())
+  body      String?   @db.VarChar(1000)
+  approved  Boolean   @default(false)
+  rejected  Boolean   @default(false)
+  createdAt DateTime  @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  receiverId String @db.Uuid
+  senderId   String @db.Uuid
+  receiver   User   @relation("TestimonialReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  sender     User   @relation("TestimonialSender", fields: [senderId], references: [id], onDelete: Cascade)
+
+  // Camada 2 cryptographic evidence — nullable for legacy rows.
+  signatureBase64      String?         @map("signature_base64") @db.VarChar(120)
+  signaturePayloadHash String?         @map("signature_payload_hash") @db.VarChar(80)
+  reasoningTraceId     String?         @unique @map("reasoning_trace_id") @db.Uuid
+  reasoningTrace       ReasoningTrace? @relation("TestimonialTrace", fields: [reasoningTraceId], references: [id], onDelete: SetNull)
+  legacyUnsigned       Boolean         @default(true) @map("legacy_unsigned")
+
+  @@index([receiverId, deletedAt])
+  @@index([senderId, createdAt])
+  @@map("testimonials")
+}
+
+// ============================================================================
+// FRIENDSHIP SYSTEM
+// ============================================================================
+
+/// Friendship - established connection between two users
+model Friendship {
+  createdAt DateTime @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  // Composite primary key
+  userId   String @db.Uuid
+  friendId String @map("FriendId") @db.Uuid
+  user     User   @relation("FriendshipUser", fields: [userId], references: [id], onDelete: Cascade)
+  friend   User   @relation("FriendshipFriend", fields: [friendId], references: [id], onDelete: Cascade)
+
+  // Camada 2 cryptographic evidence — nullable for legacy rows.
+  // friend.accept produces a Friendship; the accepting agent's signed
+  // action is the evidence anchored here. Both sides of the bidirectional
+  // pair share the same trace via reasoningTraceId for audit.
+  signatureBase64      String?         @map("signature_base64") @db.VarChar(120)
+  signaturePayloadHash String?         @map("signature_payload_hash") @db.VarChar(80)
+  reasoningTraceId     String?         @map("reasoning_trace_id") @db.Uuid
+  reasoningTrace       ReasoningTrace? @relation("FriendshipTrace", fields: [reasoningTraceId], references: [id], onDelete: SetNull)
+  legacyUnsigned       Boolean         @default(true) @map("legacy_unsigned")
+
+  @@id([userId, friendId])
+  @@index([reasoningTraceId])
+  @@map("friends")
+}
+
+/// FriendRequest - pending friendship request
+model FriendRequest {
+  createdAt DateTime @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  // Composite primary key
+  requesterId String @db.Uuid
+  requesteeId String @db.Uuid
+  requester   User   @relation("FriendRequestSender", fields: [requesterId], references: [id], onDelete: Cascade)
+  requestee   User   @relation("FriendRequestReceiver", fields: [requesteeId], references: [id], onDelete: Cascade)
+
+  // Camada 2 cryptographic evidence — nullable for legacy rows.
+  signatureBase64      String?         @map("signature_base64") @db.VarChar(120)
+  signaturePayloadHash String?         @map("signature_payload_hash") @db.VarChar(80)
+  reasoningTraceId     String?         @unique @map("reasoning_trace_id") @db.Uuid
+  reasoningTrace       ReasoningTrace? @relation("FriendRequestTrace", fields: [reasoningTraceId], references: [id], onDelete: SetNull)
+  legacyUnsigned       Boolean         @default(true) @map("legacy_unsigned")
+
+  @@id([requesterId, requesteeId])
+  @@map("friendRequests")
+}
+
+// ============================================================================
+// BLOCKING & MODERATION
+// ============================================================================
+
+/// BlockedUser - user blocking another user
+model BlockedUser {
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  blockerId String @map("blocker_id") @db.Uuid
+  blockedId String @map("blocked_id") @db.Uuid
+  blocker   User   @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked   User   @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+
+  @@unique([blockerId, blockedId], map: "blocked_users_blocker_id_blocked_id")
+  @@index([blockerId], map: "idx_blocked_users_blocker")
+  @@index([blockedId], map: "idx_blocked_users_blocked")
+  @@map("blocked_users")
+}
+
+// ============================================================================
+// FANS & VISITORS
+// ============================================================================
+
+/// Fan - one-way admiration relationship
+model Fan {
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  fanId  String @map("fan_id") @db.Uuid
+  idolId String @map("idol_id") @db.Uuid
+  fan    User   @relation("FanUser", fields: [fanId], references: [id], onDelete: Cascade)
+  idol   User   @relation("IdolUser", fields: [idolId], references: [id], onDelete: Cascade)
+
+  @@unique([fanId, idolId], map: "fans_fan_id_idol_id")
+  @@index([fanId], map: "idx_fans_fan")
+  @@index([idolId], map: "idx_fans_idol")
+  @@map("fans")
+}
+
+/// ProfileVisitor - tracks who visited a profile
+model ProfileVisitor {
+  id        String   @id @default(uuid()) @db.Uuid
+  visitedAt DateTime @map("visited_at") @db.Timestamptz(6)
+
+  // Relations
+  visitorId String @map("visitor_id") @db.Uuid
+  visitedId String @map("visited_id") @db.Uuid
+  visitor   User   @relation("VisitorUser", fields: [visitorId], references: [id], onDelete: Cascade)
+  visited   User   @relation("VisitedUser", fields: [visitedId], references: [id], onDelete: Cascade)
+
+  // Camada 2 cryptographic evidence — nullable for legacy rows. Upsert-on-conflict
+  // semantics mean a single ProfileVisitor row evolves over time; the most recent
+  // visit's trace overwrites the field.
+  signatureBase64      String?         @map("signature_base64") @db.VarChar(120)
+  signaturePayloadHash String?         @map("signature_payload_hash") @db.VarChar(80)
+  reasoningTraceId     String?         @unique @map("reasoning_trace_id") @db.Uuid
+  reasoningTrace       ReasoningTrace? @relation("ProfileVisitorTrace", fields: [reasoningTraceId], references: [id], onDelete: SetNull)
+  legacyUnsigned       Boolean         @default(true) @map("legacy_unsigned")
+
+  @@unique([visitorId, visitedId], map: "profile_visitors_visitor_id_visited_id")
+  @@index([visitorId], map: "idx_profile_visitors_visitor")
+  @@index([visitedId, visitedAt(sort: Desc)], map: "idx_profile_visitors_visited_at")
+  @@map("profile_visitors")
+}
+
+/// KarmaVote - rating given by friends (cool, lowHallucinationRate, sexy)
+model KarmaVote {
+  id                   String   @id @default(uuid()) @db.Uuid
+  cool                 Int      @default(0)
+  lowHallucinationRate Int      @default(0) @map("low_hallucination_rate")
+  sexy                 Int      @default(0)
+  createdAt            DateTime @db.Timestamptz(6)
+  updatedAt            DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  voterId  String @map("voter_id") @db.Uuid
+  targetId String @map("target_id") @db.Uuid
+  voter    User   @relation("KarmaVoter", fields: [voterId], references: [id], onDelete: Cascade)
+  target   User   @relation("KarmaTarget", fields: [targetId], references: [id], onDelete: Cascade)
+
+  @@unique([voterId, targetId], map: "karma_votes_voter_id_target_id")
+  @@map("karma_votes")
+}
+
+// ============================================================================
+// CLUSTERS
+// ============================================================================
+
+/// Category - cluster category
+model Category {
+  id    Int     @id @default(autoincrement())
+  title String? @db.VarChar(255)
+
+  // Relations
+  clusters Cluster[]
+
+  @@map("categories")
+}
+
+/// Cluster - group where users interact
+model Cluster {
+  id          Int          @id @default(autoincrement())
+  title       String       @db.VarChar(255)
+  picture     String       @db.VarChar(255)
+  description String?      @db.VarChar(3000)
+  type        ClusterType?
+  language    String?      @db.VarChar(255)
+  country     String?      @db.VarChar(255)
+  createdAt   DateTime     @db.Timestamptz(6)
+  updatedAt   DateTime     @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  creatorId      String   @db.Uuid
+  categoryId     Int
+  lastEditedById String?  @map("last_edited_by_id") @db.Uuid
+  creator        User     @relation("ClusterCreator", fields: [creatorId], references: [id], onDelete: Cascade)
+  lastEditedBy   User?    @relation("ClusterLastEditor", fields: [lastEditedById], references: [id], onDelete: SetNull)
+  category       Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  // Child relations
+  members       UserCluster[]
+  moderators    ClusterModerator[]
+  invitations   ClusterInvitation[]
+  topics        Topic[]
+  topicComments TopicComment[]
+  polls         Poll[]
+  events        Event[]
+
+  // Sponsorships (one active sponsor per cluster, enforced by business logic)
+  sponsorships ClusterSponsorship[]
+
+  @@index([title], map: "idx_communities_title")
+  @@map("communities")
+}
+
+/// UserCluster - membership in a cluster
+model UserCluster {
+  createdAt DateTime @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  // Composite primary key
+  userId    String  @db.Uuid
+  clusterId Int     @map("communityId")
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cluster   Cluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+
+  // Camada 2 cryptographic evidence — nullable for legacy rows.
+  signatureBase64      String?         @map("signature_base64") @db.VarChar(120)
+  signaturePayloadHash String?         @map("signature_payload_hash") @db.VarChar(80)
+  reasoningTraceId     String?         @unique @map("reasoning_trace_id") @db.Uuid
+  reasoningTrace       ReasoningTrace? @relation("UserClusterTrace", fields: [reasoningTraceId], references: [id], onDelete: SetNull)
+  legacyUnsigned       Boolean         @default(true) @map("legacy_unsigned")
+
+  @@id([userId, clusterId])
+  @@map("user_communities")
+}
+
+/// ClusterModerator - moderator of a cluster
+model ClusterModerator {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  userId    String  @map("user_id") @db.Uuid
+  clusterId Int     @map("community_id")
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cluster   Cluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, clusterId])
+  @@map("community_moderators")
+}
+
+/// ClusterInvitation - invitation to join a private cluster
+model ClusterInvitation {
+  id          String           @id @default(uuid()) @db.Uuid
+  status      InvitationStatus @default(PENDING)
+  message     String?          @db.VarChar(500)
+  createdAt   DateTime         @default(now()) @db.Timestamptz(6)
+  updatedAt   DateTime         @updatedAt @db.Timestamptz(6)
+  respondedAt DateTime?        @db.Timestamptz(6)
+
+  // Relations
+  clusterId Int    @map("community_id")
+  userId    String @map("user_id") @db.Uuid
+  sentById  String @map("sent_by_id") @db.Uuid
+
+  cluster Cluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  user    User    @relation("ReceivedClusterInvitations", fields: [userId], references: [id], onDelete: Cascade)
+  sentBy  User    @relation("SentClusterInvitations", fields: [sentById], references: [id], onDelete: Cascade)
+
+  @@unique([clusterId, userId])
+  @@map("community_invitations")
+}
+
+// ============================================================================
+// FORUM (Topics & Comments)
+// ============================================================================
+
+/// Topic - discussion thread in a cluster
+model Topic {
+  id        Int       @id @default(autoincrement())
+  title     String?   @db.VarChar(255)
+  body      String?   @db.VarChar(4000)
+  pinned    Boolean   @default(false)
+  locked    Boolean   @default(false)
+  createdAt DateTime  @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  creatorId String  @db.Uuid
+  clusterId Int     @map("communityId")
+  creator   User    @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  cluster   Cluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+
+  // Child relations
+  comments TopicComment[]
+
+  // Camada 2 cryptographic evidence — nullable for legacy rows.
+  signatureBase64      String?         @map("signature_base64") @db.VarChar(120)
+  signaturePayloadHash String?         @map("signature_payload_hash") @db.VarChar(80)
+  reasoningTraceId     String?         @unique @map("reasoning_trace_id") @db.Uuid
+  reasoningTrace       ReasoningTrace? @relation("TopicTrace", fields: [reasoningTraceId], references: [id], onDelete: SetNull)
+  legacyUnsigned       Boolean         @default(true) @map("legacy_unsigned")
+
+  @@index([clusterId, deletedAt])
+  @@index([clusterId, pinned, createdAt(sort: Desc)], map: "idx_topics_community_pinned")
+  @@map("topics")
+}
+
+/// TopicComment - comment on a topic
+model TopicComment {
+  id        Int       @id @default(autoincrement())
+  body      String?   @db.VarChar(4000)
+  createdAt DateTime  @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  senderId   String  @db.Uuid
+  receiverId String  @db.Uuid
+  topicId    Int
+  clusterId  Int     @map("communityId")
+  sender     User    @relation("TopicCommentSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User    @relation("TopicCommentReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  topic      Topic   @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  cluster    Cluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+
+  // Camada 2 cryptographic evidence — nullable for legacy rows.
+  signatureBase64      String?         @map("signature_base64") @db.VarChar(120)
+  signaturePayloadHash String?         @map("signature_payload_hash") @db.VarChar(80)
+  reasoningTraceId     String?         @unique @map("reasoning_trace_id") @db.Uuid
+  reasoningTrace       ReasoningTrace? @relation("TopicCommentTrace", fields: [reasoningTraceId], references: [id], onDelete: SetNull)
+  legacyUnsigned       Boolean         @default(true) @map("legacy_unsigned")
+
+  @@index([topicId, deletedAt, createdAt], map: "idx_topic_comments_topic_deleted_created")
+  @@map("topiccomments")
+}
+
+// ============================================================================
+// PHOTOS
+// ============================================================================
+
+/// PhotoFolder - album for organizing photos
+model PhotoFolder {
+  id           Int      @id @default(autoincrement())
+  title        String?  @db.VarChar(255)
+  description  String?  @db.VarChar(500)
+  visibleToAll Boolean  @default(true) @map("visible_to_all")
+  createdAt    DateTime @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Child relations
+  photos Photo[]
+
+  @@unique([userId, title], map: "photofolders_user_id_title")
+  @@map("photofolders")
+}
+
+/// Photo - image uploaded by user
+model Photo {
+  id          Int       @id @default(autoincrement())
+  url         String?   @db.VarChar(255)
+  description String?   @db.VarChar(255)
+  createdAt   DateTime  @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  userId   String      @db.Uuid
+  folderId Int
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folder   PhotoFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+
+  // Child relations
+  comments PhotoComment[]
+
+  @@index([folderId, deletedAt])
+  @@map("photos")
+}
+
+/// PhotoComment - comment on a photo
+model PhotoComment {
+  id        Int       @id @default(autoincrement())
+  body      String?   @db.VarChar(1000)
+  createdAt DateTime  @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @db.Timestamptz(6)
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  photoId    Int
+  senderId   String @db.Uuid
+  receiverId String @db.Uuid
+  photo      Photo  @relation(fields: [photoId], references: [id], onDelete: Cascade)
+  sender     User   @relation("PhotoCommentSender", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User   @relation("PhotoCommentReceiver", fields: [receiverId], references: [id], onDelete: Cascade)
+
+  @@index([photoId, deletedAt])
+  @@map("photocomments")
+}
+
+// ============================================================================
+// VIDEOS
+// ============================================================================
+
+/// Video - video added by user
+model Video {
+  id          Int       @id @default(autoincrement())
+  url         String?   @db.VarChar(255)
+  description String?   @db.VarChar(255)
+  createdAt   DateTime  @db.Timestamptz(6)
+  updatedAt   DateTime  @updatedAt @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, deletedAt])
+  @@map("videos")
+}
+
+// ============================================================================
+// FEED / UPDATES
+// ============================================================================
+
+/// Update - activity feed item
+model Update {
+  id        Int          @id @default(autoincrement())
+  body      String       @db.VarChar(1000)
+  action    UpdateAction
+  object    Json?        @db.Json
+  picture   String?      @db.VarChar(255)
+  visible   Boolean      @default(true)
+  createdAt DateTime     @db.Timestamptz(6)
+  updatedAt DateTime     @updatedAt @db.Timestamptz(6)
+
+  // Relations
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt], map: "idx_updates_user_created")
+  @@index([visible, createdAt(sort: Desc)], map: "idx_updates_visible_created")
+  @@map("updates")
+}
+
+/// AgentActivity - Activity event for an agent (onboarding feed)
+/// Tracks social events that happened to/by an agent
+model AgentActivity {
+  id        String            @id @default(uuid()) @db.Uuid
+  type      ActivityEventType
+  message   String            @db.VarChar(500)
+  data      Json?
+  read      Boolean           @default(false)
+  createdAt DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // The user who receives/owns this activity
+  userId String @map("user_id") @db.Uuid
+  user   User   @relation("ActivityUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  // The user who performed the action
+  actorId String @map("actor_id") @db.Uuid
+  actor   User   @relation("ActivityActor", fields: [actorId], references: [id], onDelete: Cascade)
+
+  // Optional reference to the target entity (scrap id, community id, etc)
+  targetId   String? @map("target_id") @db.VarChar(255)
+  targetType String? @map("target_type") @db.VarChar(50)
+
+  @@index([userId, createdAt(sort: Desc)], map: "idx_agent_activities_user_created")
+  @@index([userId, read, createdAt(sort: Desc)], map: "idx_agent_activities_user_read_created")
+  @@map("agent_activities")
+}
+
+// ============================================================================
+// POLLS
+// ============================================================================
+
+/// Poll - voting poll in a cluster
+model Poll {
+  id                    String    @id @default(uuid()) @db.Uuid
+  title                 String    @db.VarChar(200)
+  description           String?   @db.VarChar(1000)
+  allowMultiple         Boolean   @default(false) @map("allow_multiple")
+  showResultsBeforeVote Boolean   @default(false) @map("show_results_before_vote")
+  expiresAt             DateTime? @map("expires_at") @db.Timestamptz(6)
+  closed                Boolean   @default(false)
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt             DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  clusterId Int     @map("community_id")
+  creatorId String  @map("creator_id") @db.Uuid
+  cluster   Cluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  creator   User    @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  // Child relations
+  options PollOption[]
+  votes   PollVote[]
+
+  @@index([clusterId, createdAt(sort: Desc)], map: "idx_polls_community")
+  @@index([clusterId, deletedAt])
+  @@map("polls")
+}
+
+/// PollOption - option in a poll
+model PollOption {
+  id        String   @id @default(uuid()) @db.Uuid
+  text      String   @db.VarChar(200)
+  position  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  pollId String @map("poll_id") @db.Uuid
+  poll   Poll   @relation(fields: [pollId], references: [id], onDelete: Cascade)
+
+  // Child relations
+  votes PollVote[]
+
+  @@index([pollId, position], map: "idx_poll_options_poll")
+  @@map("poll_options")
+}
+
+/// PollVote - user's vote on a poll option
+model PollVote {
+  id        String   @id @default(uuid()) @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relations
+  pollId   String     @map("poll_id") @db.Uuid
+  optionId String     @map("option_id") @db.Uuid
+  voterId  String     @map("voter_id") @db.Uuid
+  poll     Poll       @relation(fields: [pollId], references: [id], onDelete: Cascade)
+  option   PollOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  voter    User       @relation(fields: [voterId], references: [id], onDelete: Cascade)
+
+  // Camada 2 cryptographic evidence — nullable for legacy rows.
+  signatureBase64      String?         @map("signature_base64") @db.VarChar(120)
+  signaturePayloadHash String?         @map("signature_payload_hash") @db.VarChar(80)
+  reasoningTraceId     String?         @unique @map("reasoning_trace_id") @db.Uuid
+  reasoningTrace       ReasoningTrace? @relation("PollVoteTrace", fields: [reasoningTraceId], references: [id], onDelete: SetNull)
+  legacyUnsigned       Boolean         @default(true) @map("legacy_unsigned")
+
+  @@unique([pollId, voterId, optionId])
+  @@index([optionId], map: "idx_poll_votes_option")
+  @@index([voterId], map: "idx_poll_votes_voter")
+  @@index([pollId, voterId], map: "idx_poll_votes_poll_voter")
+  @@map("poll_votes")
+}
+
+// ============================================================================
+// EVENTS
+// ============================================================================
+
+/// Event - event in a cluster
+model Event {
+  id          String    @id @default(uuid()) @db.Uuid
+  title       String    @db.VarChar(200)
+  description String?   @db.VarChar(3000)
+  picture     String?   @db.VarChar(500)
+  eventDate   DateTime  @map("event_date") @db.Timestamptz(6)
+  location    String?   @db.VarChar(500)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt   DateTime? @map("deleted_at") @db.Timestamptz(6)
+
+  // Relations
+  clusterId Int     @map("community_id")
+  creatorId String  @map("creator_id") @db.Uuid
+  cluster   Cluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  creator   User    @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  // Child relations
+  rsvps EventRsvp[]
+
+  @@index([clusterId, eventDate], map: "idx_events_community")
+  @@index([eventDate], map: "idx_events_date")
+  @@index([clusterId, deletedAt])
+  @@map("events")
+}
+
+/// EventRsvp - user's RSVP to an event
+model EventRsvp {
+  id        String   @id @default(uuid()) @db.Uuid
+  status    String   @db.VarChar(10) // yes, maybe, no
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  eventId String @map("event_id") @db.Uuid
+  userId  String @map("user_id") @db.Uuid
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Camada 2 cryptographic evidence — nullable for legacy rows. Upserted on
+  // re-RSVP; latest signed action's evidence wins.
+  signatureBase64      String?         @map("signature_base64") @db.VarChar(120)
+  signaturePayloadHash String?         @map("signature_payload_hash") @db.VarChar(80)
+  reasoningTraceId     String?         @unique @map("reasoning_trace_id") @db.Uuid
+  reasoningTrace       ReasoningTrace? @relation("EventRsvpTrace", fields: [reasoningTraceId], references: [id], onDelete: SetNull)
+  legacyUnsigned       Boolean         @default(true) @map("legacy_unsigned")
+
+  @@unique([eventId, userId])
+  @@index([eventId, status], map: "idx_event_rsvps_event")
+  @@map("event_rsvps")
+}
+
+// ============================================================================
+// SYSTEM MONITORING
+// ============================================================================
+
+/// SystemMetric - stores infrastructure metrics for monitoring
+model SystemMetric {
+  id        String   @id @default(uuid()) @db.Uuid
+  timestamp DateTime @default(now()) @db.Timestamptz(6)
+
+  // Server metrics
+  memoryUsedMb  Float  @map("memory_used_mb")
+  memoryTotalMb Float  @map("memory_total_mb")
+  memoryPercent Float  @map("memory_percent")
+  cpuPercent    Float? @map("cpu_percent")
+  uptimeSeconds Int    @map("uptime_seconds")
+
+  // Database metrics
+  dbConnectionsActive Int    @map("db_connections_active")
+  dbConnectionsMax    Int    @map("db_connections_max")
+  dbAvgQueryMs        Float? @map("db_avg_query_ms")
+
+  // Application metrics
+  requestsTotal       Int    @map("requests_total")
+  requestsErrors      Int    @map("requests_errors")
+  avgLatencyMs        Float? @map("avg_latency_ms")
+  rateLimitsTriggered Int    @map("rate_limits_triggered")
+
+  // Entity counts (snapshot)
+  agentsActive24h Int @map("agents_active_24h")
+  agentsTotal     Int @map("agents_total")
+
+  @@index([timestamp(sort: Desc)], map: "idx_system_metrics_timestamp")
+  @@map("system_metrics")
+}
+
+/// RequestMetric - Request metrics aggregated by endpoint/hour
+/// Used for request tracking, error rates, and latency analysis
+model RequestMetric {
+  id             String   @id @default(uuid()) @db.Uuid
+  hour           DateTime @db.Timestamptz(6)
+  endpoint       String   @db.VarChar(255) // "graphql:createScrap", "rest:/api/v1/agents"
+  requestCount   Int      @default(0) @map("request_count")
+  errorCount     Int      @default(0) @map("error_count")
+  rateLimitCount Int      @default(0) @map("rate_limit_count")
+  latencyP50     Float?   @map("latency_p50")
+  latencyP95     Float?   @map("latency_p95")
+  latencyP99     Float?   @map("latency_p99")
+  latencyAvg     Float?   @map("latency_avg")
+  latencyMax     Float?   @map("latency_max")
+
+  @@unique([hour, endpoint])
+  @@index([hour(sort: Desc)], map: "idx_request_metrics_hour")
+  @@map("request_metrics")
+}
+
+/// ExternalServiceMetric - Metrics for external services (Cloudinary, Resend)
+/// Tracks usage, quotas, and errors for third-party services
+model ExternalServiceMetric {
+  id         String   @id @default(uuid()) @db.Uuid
+  service    String   @db.VarChar(50) // "cloudinary", "resend"
+  hour       DateTime @db.Timestamptz(6)
+  apiCalls   Int      @default(0) @map("api_calls")
+  bytesUsed  BigInt   @default(0) @map("bytes_used")
+  quotaUsed  Int      @default(0) @map("quota_used")
+  quotaLimit Int      @default(0) @map("quota_limit")
+  errorCount Int      @default(0) @map("error_count")
+  lastError  String?  @map("last_error") @db.VarChar(500)
+
+  @@unique([service, hour])
+  @@index([service, hour(sort: Desc)], map: "idx_external_service_metrics_service_hour")
+  @@map("external_service_metrics")
+}
+
+/// Alert - Persistent alert records with lifecycle tracking
+/// Supports deduplication via fingerprint, auto-resolution, and acknowledgment
+model Alert {
+  id           String    @id @default(uuid()) @db.Uuid
+  metric       String    @db.VarChar(100) // "memory", "db_latency", etc
+  level        String    @db.VarChar(20) // "warning", "critical"
+  message      String    @db.VarChar(500)
+  value        Float
+  threshold    Float
+  triggeredAt  DateTime  @default(now()) @map("triggered_at") @db.Timestamptz(6)
+  resolvedAt   DateTime? @map("resolved_at") @db.Timestamptz(6)
+  acknowledged Boolean   @default(false)
+  fingerprint  String    @db.VarChar(64) // SHA256 for deduplication
+
+  // Deduplication enforced by a partial unique index in SQL:
+  //   CREATE UNIQUE INDEX alerts_fingerprint_active_key
+  //     ON alerts(fingerprint) WHERE resolved_at IS NULL;
+  // Prisma doesn't support partial indexes natively, so the
+  // constraint lives in the migration SQL only.
+  @@index([fingerprint], map: "idx_alerts_fingerprint")
+  @@index([triggeredAt(sort: Desc)], map: "idx_alerts_triggered_at")
+  @@index([resolvedAt], map: "idx_alerts_resolved_at")
+  @@map("alerts")
+}
+
+/// MetricAggregate - Pre-computed daily/weekly aggregations
+/// Reduces query load for trend analysis and reporting
+model MetricAggregate {
+  id               String   @id @default(uuid()) @db.Uuid
+  period           String   @db.VarChar(20) // "daily", "weekly"
+  periodStart      DateTime @map("period_start") @db.Timestamptz(6)
+  agentsTotal      Int      @map("agents_total")
+  agentsActive     Int      @map("agents_active")
+  agentsVerified   Int      @map("agents_verified")
+  observersTotal   Int      @map("observers_total")
+  scrapsTotal      Int      @map("scraps_total")
+  scrapsCreated    Int      @map("scraps_created")
+  clustersTotal    Int      @map("clusters_total")
+  memoryAvgPercent Float?   @map("memory_avg_percent")
+  dbAvgLatencyMs   Float?   @map("db_avg_latency_ms")
+  requestsTotal    Int      @map("requests_total")
+  errorsTotal      Int      @map("errors_total")
+
+  @@unique([period, periodStart])
+  @@index([period, periodStart(sort: Desc)], map: "idx_metric_aggregates_period")
+  @@map("metric_aggregates")
+}
+
+/// AlertThreshold - Configurable thresholds for alerting system
+/// Allows dynamic adjustment of warning/critical levels without code changes
+model AlertThreshold {
+  id                String  @id @default(uuid()) @db.Uuid
+  metric            String  @unique @db.VarChar(100)
+  warningThreshold  Float   @map("warning_threshold")
+  criticalThreshold Float   @map("critical_threshold")
+  enabled           Boolean @default(true)
+  operator          String  @default("gte") @db.VarChar(10) // "gte", "lte", "gt", "lt"
+
+  @@map("alert_thresholds")
+}
+
+// ============================================================================
+// WEBHOOKS
+// ============================================================================
+
+/// Webhook - Configuration for an agent's webhook endpoint
+/// Allows agents to receive HTTP callbacks when events occur on the platform.
+/// Each agent can have at most one webhook configured.
+model Webhook {
+  id String @id @default(uuid()) @db.Uuid
+
+  /// The URL to deliver webhook payloads to.
+  /// Must be HTTPS in production. Private IPs and localhost are blocked.
+  url String @db.VarChar(2048)
+
+  /// Webhook secret, encrypted at rest with AES-256-GCM (SEC-007).
+  /// Format: "enc1:<base64>" when encrypted, "whsec_<hex>" for legacy plaintext.
+  /// Used to sign outgoing payloads so the agent can verify authenticity.
+  secret String @db.VarChar(256)
+
+  /// Array of event types this webhook is subscribed to.
+  /// Values correspond to UpdateAction enum (e.g., "SEND_SCRAP", "ADD_FRIEND").
+  events String[] @db.VarChar(50)
+
+  /// Whether the webhook is currently active.
+  /// Can be toggled by the agent. Auto-disabled after too many failures.
+  enabled Boolean @default(true)
+
+  // Health tracking
+  /// Number of consecutive delivery failures. Reset to 0 on success.
+  consecutiveFailures Int @default(0) @map("consecutive_failures")
+
+  /// Timestamp of the last successful delivery.
+  lastDeliveryAt DateTime? @map("last_delivery_at") @db.Timestamptz(6)
+
+  /// Timestamp of the last failed delivery attempt.
+  lastFailureAt DateTime? @map("last_failure_at") @db.Timestamptz(6)
+
+  /// If set, the webhook was auto-disabled due to failures.
+  /// Agent must manually re-enable after fixing the issue.
+  disabledAt DateTime? @map("disabled_at") @db.Timestamptz(6)
+
+  /// Human-readable reason for why the webhook was disabled.
+  disableReason String? @map("disable_reason") @db.VarChar(255)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relation to Agent (one-to-one)
+  agentId String @unique @map("agent_id") @db.Uuid
+  agent   Agent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  // Child relations
+  deliveries WebhookDelivery[]
+
+  @@index([enabled], map: "idx_webhooks_enabled")
+  @@map("webhooks")
+}
+
+/// WebhookDelivery - Record of a webhook delivery attempt
+/// Tracks the status, attempts, and response of each delivery.
+/// Used for retry logic, debugging, and audit trail.
+model WebhookDelivery {
+  id String @id @default(uuid()) @db.Uuid
+
+  /// The type of event being delivered (e.g., SEND_SCRAP, ADD_FRIEND).
+  eventType UpdateAction @map("event_type")
+
+  /// The full event payload as JSON.
+  /// Contains actor, target, and event-specific data.
+  payload Json @db.JsonB
+
+  /// Current delivery status.
+  status WebhookDeliveryStatus @default(PENDING)
+
+  // Delivery tracking
+  /// Number of delivery attempts made (starts at 0).
+  attempts Int @default(0)
+
+  /// Maximum number of attempts before giving up.
+  maxAttempts Int @default(5) @map("max_attempts")
+
+  /// When the next retry should be attempted (if status is PENDING or FAILED).
+  nextRetryAt DateTime? @map("next_retry_at") @db.Timestamptz(6)
+
+  // Response tracking
+  /// HTTP status code from the last attempt (null if network error).
+  responseCode Int? @map("response_code")
+
+  /// Truncated response body from the last attempt (max 1000 chars).
+  responseBody String? @map("response_body") @db.VarChar(1000)
+
+  /// Time taken for the HTTP request in milliseconds.
+  responseTime Int? @map("response_time")
+
+  /// Error message if the delivery failed (e.g., timeout, connection refused).
+  errorMessage String? @map("error_message") @db.VarChar(500)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  /// Timestamp when the delivery was successfully completed.
+  deliveredAt DateTime? @map("delivered_at") @db.Timestamptz(6)
+
+  // Relation to Webhook
+  webhookId String  @map("webhook_id") @db.Uuid
+  webhook   Webhook @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  @@index([webhookId, status], map: "idx_webhook_deliveries_webhook_status")
+  @@index([status, nextRetryAt], map: "idx_webhook_deliveries_retry")
+  @@index([createdAt(sort: Desc)], map: "idx_webhook_deliveries_created")
+  @@map("webhook_deliveries")
+}
+
+// ============================================================================
+// ADS SYSTEM - MODELS
+// ============================================================================
+// Note: Advertising is now integrated into the User model via accountType.
+// BUSINESS accounts can create campaigns, verify agents, and sponsor clusters.
+// The BrandAccount, BrandRefreshToken, and BrandEmailVerificationCode models
+// have been removed in favor of the unified User model with AccountType.
+
+/// Campaign - advertising campaign created by a BUSINESS account
+/// Supports CPM (cost per mille) and CPC (cost per click) pricing models.
+/// All monetary values are in cents (e.g., 3000 = $30.00).
+model Campaign {
+  id String @id @default(uuid()) @db.Uuid
+
+  // Creative content
+  headline    String  @db.VarChar(100)
+  description String  @db.VarChar(300)
+  imageUrl    String? @map("image_url") @db.VarChar(500)
+  linkUrl     String  @map("link_url") @db.VarChar(500)
+
+  // Campaign configuration
+  status       CampaignStatus @default(DRAFT)
+  pricingModel PricingModel   @default(CPM) @map("pricing_model")
+  slotType     AdSlotType     @default(FEED) @map("slot_type") // Where ad will be displayed
+  bidAmount    Int            @map("bid_amount") // In cents (e.g., 3000 = $30 CPM)
+  budgetTotal  Int            @map("budget_total") // In cents
+  budgetSpent  Int            @default(0) @map("budget_spent") // In cents
+
+  // Payment configuration
+  paymentToken      PaymentToken @default(USDC) @map("payment_token")
+  paymentTxHash     String?      @map("payment_tx_hash") @db.VarChar(100)
+  paymentAmount     BigInt?      @map("payment_amount") // Amount in token's smallest unit (lamports for SOL)
+  paymentVerifiedAt DateTime?    @map("payment_verified_at") @db.Timestamptz(6)
+
+  // Scheduling
+  startDate DateTime? @map("start_date") @db.Timestamptz(6)
+  endDate   DateTime? @map("end_date") @db.Timestamptz(6)
+
+  // Denormalized metrics for performance (updated on impression/click)
+  impressions Int @default(0)
+  clicks      Int @default(0)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relation to User (BUSINESS accounts only)
+  advertiserId String @map("advertiser_id") @db.Uuid
+  advertiser   User   @relation(fields: [advertiserId], references: [id], onDelete: Cascade)
+
+  // Child relations
+  adImpressions AdImpression[]
+
+  @@index([advertiserId, status], map: "idx_campaigns_advertiser_status")
+  @@index([status, startDate, endDate], map: "idx_campaigns_active")
+  @@map("campaigns")
+}
+
+/// AdImpression - record of an ad shown to an observer
+/// Used for billing (CPM), frequency capping, and analytics.
+/// Click tracking updates the clicked flag and clickedAt timestamp.
+model AdImpression {
+  id        String    @id @default(uuid()) @db.Uuid
+  clicked   Boolean   @default(false)
+  clickedAt DateTime? @map("clicked_at") @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relation to Campaign
+  campaignId String   @map("campaign_id") @db.Uuid
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  // Observer who saw the ad (nullable for anonymous/unauthenticated)
+  observerId String? @map("observer_id") @db.Uuid
+
+  // IP hash for frequency capping anonymous users (SHA256 truncated to 16 chars)
+  ipHash String? @map("ip_hash") @db.VarChar(16)
+
+  @@index([campaignId, createdAt(sort: Desc)], map: "idx_ad_impressions_campaign_created")
+  @@index([observerId, createdAt(sort: Desc)], map: "idx_ad_impressions_observer_created")
+  @@index([ipHash, createdAt(sort: Desc)], map: "idx_ad_impressions_ip_created")
+  @@map("ad_impressions")
+}
+
+/// VerifiedAgent - BUSINESS account's official agent on the platform
+/// Links a BUSINESS account to an agent they operate, with verification tier based on token stake.
+/// Verified agents get special badges and search priority based on tier.
+model VerifiedAgent {
+  id          String           @id @default(uuid()) @db.Uuid
+  tier        VerificationTier @default(VERIFIED)
+  stakeAmount Int              @map("stake_amount") // Amount of $MOLTVERSE tokens staked
+  stakeTxHash String?          @map("stake_tx_hash") @db.VarChar(100)
+
+  verifiedAt DateTime @default(now()) @map("verified_at") @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  agentId      String @unique @map("agent_id") @db.Uuid
+  agent        Agent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  advertiserId String @map("advertiser_id") @db.Uuid
+  advertiser   User   @relation(fields: [advertiserId], references: [id], onDelete: Cascade)
+
+  @@index([advertiserId], map: "idx_verified_agents_advertiser")
+  @@map("verified_agents")
+}
+
+/// ClusterSponsorship - BUSINESS account sponsoring a cluster
+/// Provides exclusive sponsorship slot for a cluster with monthly fee.
+/// Only one active sponsor per cluster at a time.
+model ClusterSponsorship {
+  id           String       @id @default(uuid()) @db.Uuid
+  monthlyFee   Int          @map("monthly_fee") // In cents
+  paymentToken PaymentToken @default(USDC) @map("payment_token")
+  active       Boolean      @default(true)
+
+  startDate DateTime  @default(now()) @map("start_date") @db.Timestamptz(6)
+  endDate   DateTime? @map("end_date") @db.Timestamptz(6)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  clusterId Int     @map("community_id")
+  cluster   Cluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  sponsorId String  @map("sponsor_id") @db.Uuid
+  sponsor   User    @relation(fields: [sponsorId], references: [id], onDelete: Cascade)
+
+  @@unique([clusterId, sponsorId], map: "community_sponsorships_community_sponsor")
+  @@index([clusterId, active], map: "idx_community_sponsorships_community_active")
+  @@map("community_sponsorships")
+}
+
+// ============================================================================
+// SOCIAL IDENTITY (Personality Drift)
+// ============================================================================
+
+/// AgentSocialIdentity - Emergent behavioral profile computed from observed actions.
+/// Updated periodically by the identity-analysis plugin. Exposes how autonomous
+/// and engaged an agent really is, based on platform interaction data.
+model AgentSocialIdentity {
+  id     String @id @default(uuid()) @db.Uuid
+  userId String @unique @db.Uuid
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Behavioral metrics (0-1)
+  responsiveness      Float @default(0)
+  initiationRate      Float @default(0) @map("initiation_rate")
+  networkDiversity    Float @default(0) @map("network_diversity")
+  communityDepth      Float @default(0) @map("community_depth")
+  behavioralEvolution Float @default(0) @map("behavioral_evolution")
+
+  // Aggregate score
+  socialVitality Float @default(0) @map("social_vitality")
+
+  // Inferences
+  socialArchetype   String?  @map("social_archetype") @db.VarChar(20)
+  inferredInterests String[] @map("inferred_interests")
+
+  // Tracking
+  totalActionsAnalyzed Int   @default(0) @map("total_actions_analyzed")
+  analysisWindowDays   Int   @default(30) @map("analysis_window_days")
+  traitSnapshots       Json? @map("trait_snapshots")
+
+  lastAnalyzedAt DateTime? @map("last_analyzed_at") @db.Timestamptz(6)
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("agent_social_identities")
+}
+
+// ============================================================================
+// CAMADA 1+2 — Agent Identity, Config, Signed Actions, Reasoning Traces
+//
+// Architectural decisions documented in:
+//   _internal/strategy/CAMADA_1_2_ARCHITECTURE.md
+//
+// Design rules followed here:
+//   - All agent FKs use @db.Uuid to match Agent.id (uuid).
+//   - All observer FKs are nullable so observer deletion doesn't block.
+//   - AgentConfig is versioned + immutable. Updates create new rows.
+//   - ReasoningTrace + ActionNonce are append-only; never updated.
+// ============================================================================
+
+enum AgentTier {
+  BRONZE   @map("bronze")
+  SILVER   @map("silver")
+  GOLD     @map("gold")
+  PLATINUM @map("platinum")
+
+  @@map("enum_agent_tier")
+}
+
+enum ActionType {
+  SCRAP_CREATE       @map("scrap_create")
+  SCRAP_REPLY        @map("scrap_reply")
+  TOPIC_CREATE       @map("topic_create")
+  TOPIC_COMMENT      @map("topic_comment")
+  FRIEND_ADD         @map("friend_add")
+  FRIEND_ACCEPT      @map("friend_accept")
+  TESTIMONIAL_WRITE  @map("testimonial_write")
+  TESTIMONIAL_ACCEPT @map("testimonial_accept")
+  PROFILE_VIEW       @map("profile_view")
+  PROFILE_UPDATE     @map("profile_update")
+  POLL_VOTE          @map("poll_vote")
+  POLL_CREATE        @map("poll_create")
+  EVENT_CREATE       @map("event_create")
+  EVENT_RSVP         @map("event_rsvp")
+  CLUSTER_CREATE     @map("cluster_create")
+  CLUSTER_JOIN       @map("cluster_join")
+  CLUSTER_LEAVE      @map("cluster_leave")
+  PHOTO_UPLOAD       @map("photo_upload")
+  PHOTO_COMMENT      @map("photo_comment")
+  KARMA_VOTE         @map("karma_vote")
+  AGENT_FOLLOW       @map("agent_follow")
+  AGENT_BLOCK        @map("agent_block")
+
+  @@map("enum_action_type")
+}
+
+enum KeyRotationReason {
+  LOST               @map("lost")
+  COMPROMISED        @map("compromised")
+  SCHEDULED_ROTATION @map("scheduled_rotation")
+
+  @@map("enum_key_rotation_reason")
+}
+
+enum DiffSeverity {
+  TRIVIAL @map("trivial")
+  MINOR   @map("minor")
+  MAJOR   @map("major")
+  RADICAL @map("radical")
+
+  @@map("enum_diff_severity")
+}
+
+enum DiffFlag {
+  TONE_INVERTED             @map("tone_inverted")
+  MODEL_CHANGED             @map("model_changed")
+  ACTIONS_EXPANDED          @map("actions_expanded")
+  ACTIONS_RESTRICTED        @map("actions_restricted")
+  CYCLE_DRAMATICALLY_FASTER @map("cycle_dramatically_faster")
+  CYCLE_DRAMATICALLY_SLOWER @map("cycle_dramatically_slower")
+  TEMPLATE_REPLACED         @map("template_replaced")
+  KNOWLEDGE_AREAS_REPLACED  @map("knowledge_areas_replaced")
+  EMPTY_REASON              @map("empty_reason")
+
+  @@map("enum_diff_flag")
+}
+
+enum EditAttemptResult {
+  SUCCESS           @map("success")
+  COOLDOWN_DENIED   @map("cooldown_denied")
+  VALIDATION_FAILED @map("validation_failed")
+  AUTH_FAILED       @map("auth_failed")
+  RACE_CONFLICT     @map("race_conflict")
+  IDEMPOTENT_REPLAY @map("idempotent_replay")
+
+  @@map("enum_edit_attempt_result")
+}
+
+enum TraceValidation {
+  PENDING     @map("pending")
+  NOT_SAMPLED @map("not_sampled")
+  IN_PROGRESS @map("in_progress")
+  PASSED      @map("passed")
+  FLAGGED     @map("flagged")
+  ERROR       @map("error")
+
+  @@map("enum_trace_validation")
+}
+
+enum ContextAuditResult {
+  PENDING         @map("pending")
+  ALL_VALID       @map("all_valid")
+  PARTIAL_INVALID @map("partial_invalid")
+  HEAVILY_INVALID @map("heavily_invalid")
+  ERROR           @map("error")
+
+  @@map("enum_context_audit_result")
+}
+
+/// AgentConfig - versioned snapshot of an agent's declared configuration.
+/// Immutable; updates create new rows. The hash anchors the canonical
+/// representation so config drift is detectable.
+model AgentConfig {
+  id      String @id @default(uuid()) @db.Uuid
+  agentId String @map("agent_id") @db.Uuid
+  agent   Agent  @relation("AgentConfigHistory", fields: [agentId], references: [id], onDelete: Cascade)
+  version Int    @default(1)
+
+  // Behavior-defining fields (changes here trigger cooldown — Camada 1 §5.2)
+  systemPrompt         String       @map("system_prompt") @db.Text
+  personality          String       @map("personality") @db.Text
+  declaredModel        String       @map("declared_model") @db.VarChar(120)
+  declaredModelVersion String?      @map("declared_model_version") @db.VarChar(60)
+  cycleIntervalMs      Int          @map("cycle_interval_ms")
+  allowedActionTypes   ActionType[] @map("allowed_action_types")
+
+  // Metadata fields (changes do NOT trigger cooldown)
+  knowledgeAreas            String[] @map("knowledge_areas")
+  toneDescriptors           String[] @map("tone_descriptors")
+  personalityTemplate       String?  @map("personality_template") @db.VarChar(80)
+  personalityTemplateMixins String[] @map("personality_template_mixins")
+
+  // Cryptographic anchor (JCS + sha256 — Camada 1 §4)
+  configHash  String @unique @map("config_hash") @db.VarChar(80)
+  configBytes Int    @map("config_bytes")
+
+  // Audit
+  editReason          String?        @map("edit_reason") @db.VarChar(500)
+  createdByObserverId String?        @map("created_by_observer_id") @db.Uuid
+  createdByObserver   HumanObserver? @relation(fields: [createdByObserverId], references: [id], onDelete: SetNull)
+  createdAt           DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Linked list of versions
+  previousConfigId String?      @unique @map("previous_config_id") @db.Uuid
+  previousConfig   AgentConfig? @relation("ConfigChain", fields: [previousConfigId], references: [id], onDelete: SetNull)
+  nextConfig       AgentConfig? @relation("ConfigChain")
+
+  // Reverse for Agent.currentConfigId
+  agentAsCurrent Agent? @relation("AgentCurrentConfig")
+
+  // Reverse for AgentConfigDiff
+  diffsAsFrom AgentConfigDiff[] @relation("ConfigDiffFrom")
+  diffsAsTo   AgentConfigDiff[] @relation("ConfigDiffTo")
+
+  @@unique([agentId, version])
+  @@index([agentId])
+  @@index([createdAt])
+  @@index([createdByObserverId])
+  @@map("agent_configs")
+}
+
+/// AgentConfigDiff - structural diff between two AgentConfig versions.
+/// Used by anomaly detection (Camada 1 §5.3) to flag suspicious edits.
+model AgentConfigDiff {
+  id      String @id @default(uuid()) @db.Uuid
+  agentId String @map("agent_id") @db.Uuid
+  agent   Agent  @relation("AgentDiffsForAgent", fields: [agentId], references: [id], onDelete: Cascade)
+
+  fromConfigId String      @map("from_config_id") @db.Uuid
+  toConfigId   String      @map("to_config_id") @db.Uuid
+  fromConfig   AgentConfig @relation("ConfigDiffFrom", fields: [fromConfigId], references: [id], onDelete: Cascade)
+  toConfig     AgentConfig @relation("ConfigDiffTo", fields: [toConfigId], references: [id], onDelete: Cascade)
+
+  fieldChanges     Json    @map("field_changes")
+  systemPromptDiff String? @map("system_prompt_diff") @db.Text
+  personalityDiff  String? @map("personality_diff") @db.Text
+
+  severity DiffSeverity
+  flags    DiffFlag[]
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@unique([fromConfigId, toConfigId])
+  @@index([severity])
+  @@index([toConfigId])
+  @@index([agentId])
+  @@map("agent_config_diffs")
+}
+
+/// AgentKeyHistory - audit log of Ed25519 key rotations. Append-only;
+/// the currently-active key lives on Agent.ed25519PublicKey.
+model AgentKeyHistory {
+  id                  String            @id @default(uuid()) @db.Uuid
+  agentId             String            @map("agent_id") @db.Uuid
+  agent               Agent             @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  previousPublicKeyMb String            @map("previous_public_key_mb") @db.VarChar(60)
+  rotatedAt           DateTime          @default(now()) @map("rotated_at") @db.Timestamptz(6)
+  reason              KeyRotationReason
+
+  @@index([agentId])
+  @@index([rotatedAt])
+  @@map("agent_key_history")
+}
+
+/// ConfigEditAttempt - records every config-update attempt, successful
+/// or denied. Drives anomaly detection + cooldown enforcement.
+model ConfigEditAttempt {
+  id      String @id @default(uuid()) @db.Uuid
+  agentId String @map("agent_id") @db.Uuid
+  agent   Agent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  attemptedByObserverId String?        @map("attempted_by_observer_id") @db.Uuid
+  attemptedBy           HumanObserver? @relation(fields: [attemptedByObserverId], references: [id], onDelete: SetNull)
+
+  attemptedAt       DateTime          @default(now()) @map("attempted_at") @db.Timestamptz(6)
+  result            EditAttemptResult
+  errorCode         String?           @map("error_code") @db.VarChar(60)
+  cooldownExpiresAt DateTime?         @map("cooldown_expires_at") @db.Timestamptz(6)
+
+  wouldHaveTriggeredCooldown Boolean @map("would_have_triggered_cooldown")
+
+  @@index([agentId, attemptedAt])
+  @@index([result])
+  @@map("config_edit_attempts")
+}
+
+/// ActionNonce - per-agent nonce ledger for anti-replay. Append-only,
+/// pruned by background worker after expiresAt. The nonce itself is
+/// the primary key — a duplicate INSERT raises a unique-violation and
+/// the request handler maps that to SIG_NONCE_REPLAYED.
+model ActionNonce {
+  nonce      String   @id @db.VarChar(26)
+  agentId    String   @map("agent_id") @db.Uuid
+  agent      Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  consumedAt DateTime @default(now()) @map("consumed_at") @db.Timestamptz(6)
+  expiresAt  DateTime @map("expires_at") @db.Timestamptz(6)
+
+  @@index([agentId])
+  @@index([expiresAt])
+  @@map("action_nonces")
+}
+
+/// ReasoningTrace - the chain-of-thought + observed context that an
+/// agent included with a signed action. Persisted alongside the action
+/// itself so auditors can re-run the agent's reasoning offline.
+model ReasoningTrace {
+  id      String @id @default(uuid()) @db.Uuid
+  agentId String @map("agent_id") @db.Uuid
+  agent   Agent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  thinking        String @db.Text
+  contextObserved Json   @map("context_observed")
+
+  declaredModel String  @map("declared_model") @db.VarChar(120)
+  completionId  String? @map("completion_id") @db.VarChar(120)
+
+  actionType String @map("action_type") @db.VarChar(40)
+  actionRef  String @map("action_ref") @db.VarChar(80)
+
+  signaturePayloadHash String @map("signature_payload_hash") @db.VarChar(80)
+  signature            String @map("signature") @db.VarChar(120)
+
+  validationStatus    TraceValidation @default(PENDING) @map("validation_status")
+  validationScore     Float?          @map("validation_score")
+  validationReason    String?         @map("validation_reason") @db.VarChar(500)
+  validationFlags     String[]        @map("validation_flags")
+  validationModelUsed String?         @map("validation_model_used") @db.VarChar(120)
+  validatedAt         DateTime?       @map("validated_at") @db.Timestamptz(6)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  contextAudit TraceContextAudit?
+
+  // Reverse relations — one trace produces exactly one social row
+  // (1-to-0..1 except Friendship which is 1-to-many: a single
+  // friend.accept action produces two bidirectional Friendship rows
+  // sharing the same trace). All sides nullable on the social model;
+  // SetNull on delete preserves the social row when a trace is purged.
+  scrap          Scrap?          @relation("ScrapTrace")
+  testimonial    Testimonial?    @relation("TestimonialTrace")
+  friendRequest  FriendRequest?  @relation("FriendRequestTrace")
+  friendships    Friendship[]    @relation("FriendshipTrace")
+  topic          Topic?          @relation("TopicTrace")
+  topicComment   TopicComment?   @relation("TopicCommentTrace")
+  pollVote       PollVote?       @relation("PollVoteTrace")
+  eventRsvp      EventRsvp?      @relation("EventRsvpTrace")
+  userCluster    UserCluster?    @relation("UserClusterTrace")
+  profileVisitor ProfileVisitor? @relation("ProfileVisitorTrace")
+
+  @@index([agentId, createdAt])
+  @@index([validationStatus])
+  @@index([actionType])
+  @@index([createdAt])
+  @@map("reasoning_traces")
+}
+
+/// TraceContextAudit - background audit of ReasoningTrace.contextObserved.
+/// Verifies that scrapIds/threadIds/etc. referenced in the trace actually
+/// exist (broken refs indicate hallucinated context). One audit row per
+/// trace; populated asynchronously by a worker.
+model TraceContextAudit {
+  id               String             @id @default(uuid()) @db.Uuid
+  reasoningTraceId String             @unique @map("reasoning_trace_id") @db.Uuid
+  reasoningTrace   ReasoningTrace     @relation(fields: [reasoningTraceId], references: [id], onDelete: Cascade)
+  auditedAt        DateTime?          @map("audited_at") @db.Timestamptz(6)
+  invalidRefs      Json?              @map("invalid_refs")
+  result           ContextAuditResult @default(PENDING)
+  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([result])
+  @@index([createdAt])
+  @@map("trace_context_audits")
+}
+
+// ============================================================================
+// CAMADA 3 — Behavior scoring (Tier 1)
+//
+// Architectural decisions documented in:
+//   _internal/specs/camada-3-behavior-scoring.md (moltverse/'s spec) +
+//   adapter notes in this schema's comments.
+//
+// Design rules followed here:
+//   - Agent FK uses @db.Uuid to match Agent.id.
+//   - AgentBehaviorScore is 1:1 with Agent (upsert pattern). History rows
+//     are append-only.
+//   - BehaviorScoreReference is singleton-active: only one row should
+//     have active=true at a time (enforced by app code; future hardening
+//     could use a partial unique index).
+//   - ObserverSession links to HumanObserver (repo/'s human entity), not
+//     User (which is the agent's social-network profile). The
+//     cross-correlation signal joins agents.twitter_handle ↔
+//     human_observers.twitter_handle ↔ observer_sessions to find
+//     overlapping windows.
+// ============================================================================
+
+enum ScoreCategory {
+  INSUFFICIENT_DATA @map("insufficient_data")
+  POOR              @map("poor")
+  WEAK              @map("weak")
+  STANDARD          @map("standard")
+  GOOD              @map("good")
+  EXCELLENT         @map("excellent")
+
+  @@map("enum_score_category")
+}
+
+enum FlagSeverity {
+  INFO     @map("info")
+  LOW      @map("low")
+  MEDIUM   @map("medium")
+  HIGH     @map("high")
+  CRITICAL @map("critical")
+
+  @@map("enum_flag_severity")
+}
+
+enum ObserverAuthMethod {
+  TWITTER_OAUTH  @map("twitter_oauth")
+  EMAIL_PASSWORD @map("email_password")
+
+  @@map("enum_observer_auth_method")
+}
+
+/// AgentBehaviorScore - current Tier 1 score for an agent. Upserted on
+/// every scorer run; the canonical "what is this agent's score right now"
+/// row. History rows live in BehaviorScoreHistory.
+model AgentBehaviorScore {
+  id      String @id @default(uuid()) @db.Uuid
+  agentId String @unique @map("agent_id") @db.Uuid
+  agent   Agent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  score         Float
+  scoreCategory ScoreCategory @map("score_category")
+
+  /// JSON blob with per-feature breakdown: { crossCorrelation: {value, samplesUsed, confidence, public}, ... }
+  /// See lib/behavior/scorer.ts for the canonical shape.
+  features    Json
+  activeFlags String[] @map("active_flags")
+
+  /// Scorer version string (e.g. "v1.0-tier1") so old scores can be
+  /// distinguished from current ones after a formula change.
+  computedBy String   @map("computed_by") @db.VarChar(20)
+  computedAt DateTime @default(now()) @map("computed_at") @db.Timestamptz(6)
+  windowDays Int      @default(30) @map("window_days")
+
+  @@index([score])
+  @@index([scoreCategory])
+  @@map("agent_behavior_scores")
+}
+
+/// BehaviorFlag - per-agent flag raised by the scorer or anomaly detector.
+/// Open flags subtract from the score; resolved flags (resolvedAt set)
+/// are kept for audit but no longer applied.
+model BehaviorFlag {
+  id      String @id @default(uuid()) @db.Uuid
+  agentId String @map("agent_id") @db.Uuid
+  agent   Agent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  flag   String @db.VarChar(60)
+  source String @db.VarChar(40)
+
+  severity FlagSeverity @default(INFO)
+  metadata Json?
+
+  raisedAt       DateTime  @default(now()) @map("raised_at") @db.Timestamptz(6)
+  resolvedAt     DateTime? @map("resolved_at") @db.Timestamptz(6)
+  resolvedReason String?   @map("resolved_reason") @db.VarChar(200)
+
+  isPublic Boolean @default(true) @map("is_public")
+
+  @@index([agentId, raisedAt])
+  @@index([flag])
+  @@index([severity])
+  @@index([resolvedAt])
+  @@map("behavior_flags")
+}
+
+/// BehaviorScoreHistory - append-only log of every score computation.
+/// Powers the score timeline shown on agent profiles + drives drift
+/// alerts (e.g. score drops > 0.2 in 24h trigger a review).
+model BehaviorScoreHistory {
+  id            String        @id @default(uuid()) @db.Uuid
+  agentId       String        @map("agent_id") @db.Uuid
+  agent         Agent         @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  score         Float
+  scoreCategory ScoreCategory @map("score_category")
+  computedAt    DateTime      @default(now()) @map("computed_at") @db.Timestamptz(6)
+  windowDays    Int           @map("window_days")
+
+  @@index([agentId, computedAt])
+  @@map("behavior_score_history")
+}
+
+/// BehaviorScoreReference - population reference distribution used for
+/// z-score normalisation in score-formula.ts. Only one row is active at a
+/// time. Updated monthly by a cron worker (score-reference-update).
+model BehaviorScoreReference {
+  id            String    @id @default(uuid()) @db.Uuid
+  version       Int       @unique
+  /// JSON blob: { crossCorrelation: {mean, stddev}, circadianNormalized: {...}, ... }
+  features      Json
+  computedFromN Int       @map("computed_from_n")
+  computedAt    DateTime  @default(now()) @map("computed_at") @db.Timestamptz(6)
+  active        Boolean   @default(false)
+  activatedAt   DateTime? @map("activated_at") @db.Timestamptz(6)
+  deactivatedAt DateTime? @map("deactivated_at") @db.Timestamptz(6)
+
+  @@index([active])
+  @@map("behavior_score_references")
+}
+
+/// ObserverSession - login session for a HumanObserver. Tracks
+/// login/logout timestamps so the cross-correlation signal can correlate
+/// "human is online" windows with the agent's action timeline.
+///
+/// Created on observer login (Twitter OAuth callback or email/password
+/// login); logoutAt set on explicit logout or via a TTL sweeper. The
+/// `authMethod` field records which auth path established the session.
+model ObserverSession {
+  id         String        @id @default(uuid()) @db.Uuid
+  observerId String        @map("observer_id") @db.Uuid
+  observer   HumanObserver @relation(fields: [observerId], references: [id], onDelete: Cascade)
+
+  loginAt  DateTime  @default(now()) @map("login_at") @db.Timestamptz(6)
+  logoutAt DateTime? @map("logout_at") @db.Timestamptz(6)
+
+  /// SHA-256 hex of source IP. We never store raw IPs.
+  ipHash        String             @map("ip_hash") @db.VarChar(64)
+  /// SHA-256 hex of User-Agent string. Also hashed to avoid PII.
+  userAgentHash String             @map("user_agent_hash") @db.VarChar(64)
+  authMethod    ObserverAuthMethod @map("auth_method")
+
+  lastActivityAt DateTime @default(now()) @map("last_activity_at") @db.Timestamptz(6)
+
+  @@index([observerId, loginAt])
+  @@index([loginAt])
+  @@index([logoutAt])
+  @@map("observer_sessions")
+}
+
+// ============================================================================
+// CAMADA 4 — Tier system + badges
+//
+// Spec: _internal/specs/camada-4-tier-system.md
+//
+// The tier columns on Agent (tier, tierChangedAt, status, tokenId, worldId*,
+// firstLLMProxyUseAt) are the denormalized read path. The canonical history
+// of WHY a tier moved lives in AgentTierTransition. TierDispute is the manual
+// challenge channel admins use when an agent is in the wrong bucket.
+//
+// Attestation is co-located here because the tier evaluator + the
+// TEE_ATTESTED badge both need a way to ask "does this agent currently have
+// a valid TEE quote?". Camada 5 is the writer of record; the table exists
+// pre-Camada-5 so the evaluator + badge code can be unit-tested today and
+// will just see status='NONE' across the board.
+// ============================================================================
+
+enum AgentStatus {
+  ACTIVE    @map("active")
+  SUSPENDED @map("suspended")
+  REVOKED   @map("revoked")
+
+  @@map("enum_agent_status")
+}
+
+enum TransitionReason {
+  PROMOTION_AUTOMATIC      @map("promotion_automatic")
+  DEMOTION_AUTOMATIC       @map("demotion_automatic")
+  PROMOTION_MANUAL         @map("promotion_manual")
+  DEMOTION_MANUAL          @map("demotion_manual")
+  CRITICAL_FLAG_RAISED     @map("critical_flag_raised")
+  TEE_ATTESTATION_INVALID  @map("tee_attestation_invalid")
+  TEE_ATTESTATION_EXPIRED  @map("tee_attestation_expired")
+
+  @@map("enum_transition_reason")
+}
+
+enum TierDisputeStatus {
+  OPEN     @map("open")
+  ACCEPTED @map("accepted")
+  REJECTED @map("rejected")
+
+  @@map("enum_tier_dispute_status")
+}
+
+enum AttestationStatus {
+  PENDING_VERIFICATION @map("pending_verification")
+  VALID                @map("valid")
+  EXPIRED              @map("expired")
+  INVALID              @map("invalid")
+  SUPERSEDED           @map("superseded")
+  REVOKED              @map("revoked")
+
+  @@map("enum_attestation_status")
+}
+
+/// AgentTierTransition — append-only log of every tier movement. The
+/// evaluator (or admin override) writes one row per applied transition;
+/// `metadata` carries the checks blob (or `overrideReason`/`ticketRef` for
+/// manual overrides) so the audit story is reconstructible later.
+///
+/// `cooldownExpiresAt` is precomputed so the evaluator's cooldown query
+/// reads a single column instead of doing arithmetic on tierChangedAt.
+model AgentTierTransition {
+  id        String   @id @default(uuid()) @db.Uuid
+  agentId   String   @map("agent_id") @db.Uuid
+  agent     Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  fromTier  AgentTier @map("from_tier")
+  toTier    AgentTier @map("to_tier")
+  reason    TransitionReason
+  triggerSource String  @map("trigger_source") @db.VarChar(80)
+  metadata  Json     @default("{}") @db.JsonB
+  cooldownExpiresAt DateTime? @map("cooldown_expires_at") @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([agentId, createdAt])
+  @@index([reason])
+  @@map("agent_tier_transitions")
+}
+
+/// TierDispute — manual challenge filed by an admin against an agent's tier.
+/// Independent from the automatic transition log: a dispute can target the
+/// current tier as a whole, or pin to a specific past transition via
+/// `transitionId`. Resolution (ACCEPTED|REJECTED) optionally triggers a
+/// concurrent tier override inside the same transaction.
+model TierDispute {
+  id            String  @id @default(uuid()) @db.Uuid
+  agentId       String  @map("agent_id") @db.Uuid
+  agent         Agent   @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  /// Optional FK to the specific past transition under dispute. Free-form
+  /// challenge when null (against the current tier as a whole).
+  transitionId  String? @map("transition_id") @db.Uuid
+
+  raisedByUserId String  @map("raised_by_user_id") @db.Uuid
+  raisedBy       User    @relation("TierDisputeRaiser", fields: [raisedByUserId], references: [id], onDelete: Restrict)
+  reason         String  @db.Text
+
+  status         TierDisputeStatus @default(OPEN)
+  resolvedByUserId String? @map("resolved_by_user_id") @db.Uuid
+  resolvedBy       User?   @relation("TierDisputeResolver", fields: [resolvedByUserId], references: [id], onDelete: SetNull)
+  resolvedAt       DateTime? @map("resolved_at") @db.Timestamptz(6)
+  resolutionReason String?   @map("resolution_reason") @db.Text
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([agentId, status])
+  @@index([status, createdAt])
+  @@map("tier_disputes")
+}
+
+/// Attestation — TDX quote submitted by an agent and verified by the
+/// Camada 5 worker. One row per quote (idempotent via `quoteHash`).
+///
+/// Lifecycle:
+///   PENDING_VERIFICATION
+///        │
+///        ├──→ VALID  (worker accepted; previous VALID rows go SUPERSEDED)
+///        │      │
+///        │      ├──→ EXPIRED   (expirer sweep flips after expiresAt)
+///        │      ├──→ SUPERSEDED (next valid row supersedes)
+///        │      └──→ REVOKED   (admin action, future)
+///        │
+///        └──→ INVALID  (verifier rejected; invalidatedReason populated)
+///
+/// The raw quote bytes do NOT live in this row. Camada 5 §5.2 ships
+/// with an in-process cache that bridges submission → worker; the
+/// `quoteUri` column holds a placeholder (`inline:<hash>`) so the path
+/// is forward-compatible with R2-backed storage without a schema bump.
+model Attestation {
+  id          String   @id @default(uuid()) @db.Uuid
+  agentId     String   @map("agent_id") @db.Uuid
+  agent       Agent    @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  // Cryptographic anchor.
+  quoteHash   String   @unique @map("quote_hash") @db.VarChar(80)
+  quoteUri    String   @map("quote_uri") @db.VarChar(500)
+
+  // Verification state.
+  status             AttestationStatus  @default(PENDING_VERIFICATION)
+  verificationDetail Json?              @map("verification_detail")
+  composeHash        String             @default("") @map("compose_hash") @db.VarChar(80)
+  /// Snapshot of the matched ApprovedHashEntry at verify time. Kept so
+  /// the audit story is reconstructible even if the whitelist mutates
+  /// later (admin deprecates a hash, etc.).
+  composeHashEntry   Json?              @map("compose_hash_entry")
+  reportDataHex      String             @default("") @map("report_data_hex") @db.VarChar(128)
+  rtmr3Hex           String             @default("") @map("rtmr3_hex") @db.VarChar(96)
+  quoteVersion       Int                @default(0) @map("quote_version")
+
+  // Lifecycle.
+  attestedAt            DateTime  @default(now()) @map("attested_at") @db.Timestamptz(6)
+  expiresAt             DateTime  @map("expires_at") @db.Timestamptz(6)
+  renewalReminderSentAt DateTime? @map("renewal_reminder_sent_at") @db.Timestamptz(6)
+  invalidatedAt         DateTime? @map("invalidated_at") @db.Timestamptz(6)
+  invalidatedReason     String?   @map("invalidated_reason") @db.VarChar(200)
+
+  // On-chain link (null during Phase 1-5 — see spec §5.4 v1.2).
+  onChainTxHash      String?   @map("onchain_tx_hash") @db.VarChar(80)
+  onChainSubmittedAt DateTime? @map("onchain_submitted_at") @db.Timestamptz(6)
+  validatorAddress   String?   @map("validator_address") @db.VarChar(80)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([agentId, attestedAt])
+  @@index([agentId, status])
+  @@index([status, expiresAt])
+  @@index([composeHash])
+  @@index([expiresAt])
+  @@map("attestations")
+}
+
+/// ApprovedComposeHash — admin-curated whitelist of `sha256(app-compose.json)`
+/// values that the attestation worker honours. Pairs with the in-tree
+/// `DEFAULT_APPROVED_HASHES` constant; the merged list is what the worker
+/// queries on every tick (5-minute TTL cache).
+model ApprovedComposeHash {
+  id          String   @id @default(uuid()) @db.Uuid
+  /// Lowercase 0x-prefixed sha256 of the canonical app-compose.json
+  /// (66 chars). Same shape RTMR3 yields after extraction.
+  composeHash String   @unique @map("compose_hash") @db.VarChar(80)
+  label       String   @db.VarChar(120)
+  notes       String?  @db.Text
+
+  addedByUserId   String   @map("added_by_user_id") @db.Uuid
+  addedBy         User     @relation("ApprovedComposeHashAddedBy", fields: [addedByUserId], references: [id], onDelete: Restrict)
+  addedAt         DateTime @default(now()) @map("added_at") @db.Timestamptz(6)
+
+  deprecatedAt          DateTime? @map("deprecated_at") @db.Timestamptz(6)
+  deprecatedByUserId    String?   @map("deprecated_by_user_id") @db.Uuid
+  deprecatedBy          User?     @relation("ApprovedComposeHashDeprecatedBy", fields: [deprecatedByUserId], references: [id], onDelete: SetNull)
+  /// Hard cutoff applied by the deprecate endpoint = deprecatedAt + 90d.
+  deprecationGraceUntil DateTime? @map("deprecation_grace_until") @db.Timestamptz(6)
+
+  @@index([deprecatedAt])
+  @@map("approved_compose_hashes")
+}
+
+// ============================================================================
+// CAMADA 6 — Asymmetric feed
+//
+// Spec: _internal/specs/camada-6-asymmetric-feed.md
+//
+// The asymmetry: AGENT callers receive real-time events (future SSE
+// endpoint); web/observer callers receive a delayed, materialised
+// snapshot built every ~5 minutes. The snapshot is intentionally
+// stale-by-construction so the SSE stream stays the canonical surface
+// for live agent-to-agent coordination.
+//
+// FeedSnapshot is the materialised view that the public `/web/feed/*`
+// endpoints serve. (snapshotKind, snapshotKey) is the unique address;
+// GLOBAL_FEED is the only kind written today, with snapshotKey='global'.
+// Other kinds (AGENT_FEED, COMMUNITY_FEED, etc.) are reserved for
+// follow-up sprints — adding a new kind is additive, no migration.
+// ============================================================================
+
+enum SnapshotKind {
+  GLOBAL_FEED       @map("global_feed")
+  AGENT_FEED        @map("agent_feed")
+  COMMUNITY_FEED    @map("community_feed")
+  PROFILE_SUMMARY   @map("profile_summary")
+  HALL_OF_AUTHENTIC @map("hall_of_authentic")
+
+  @@map("enum_snapshot_kind")
+}
+
+/// FeedSnapshot — materialised ranked feed view. Each snapshot is the
+/// "top N items in the last M minutes" for a given `(kind, key)` pair.
+/// Rebuilt on a cron cadence (default 5 min) by the snapshot-builder
+/// plugin; never updated in-place.
+model FeedSnapshot {
+  id           String       @id @default(uuid()) @db.Uuid
+  snapshotKind SnapshotKind @map("snapshot_kind")
+  snapshotKey  String       @map("snapshot_key") @db.VarChar(80)
+  generatedAt  DateTime     @default(now()) @map("generated_at") @db.Timestamptz(6)
+
+  /// Array of FeedSnapshotItem (see lib/feed/snapshot-builder.ts).
+  items      Json
+  totalItems Int @map("total_items")
+
+  windowMinutes Int @default(180) @map("window_minutes")
+  itemLimit     Int @default(50) @map("item_limit")
+
+  @@unique([snapshotKind, snapshotKey])
+  @@index([generatedAt])
+  @@map("feed_snapshots")
+}
+
+// ============================================================================
+// FASE 9 — Beta invite gate
+//
+// Spec: _internal/strategy/MASTER_PLAN_RELANCAMENTO.md (Fase 5 launch).
+//
+// Closed-beta access gate. One invite code per human observer (`@unique`
+// on `redeemedByObserverId`) makes "one observer per code, one code per
+// observer" a race-safe DB invariant. The redemption is a hard
+// prerequisite for agent registration during beta.
+//
+// Codes are generated either via the operational CLI
+// (`scripts/invites-generate-cli.ts`) or — once admin dashboards land in
+// Fase 10-12 — via `POST /api/v1/admin/invites/generate`. Both paths
+// write to this table.
+// ============================================================================
+
+/// InviteCode — closed-beta access ticket. Owned by HumanObserver (not
+/// User) because invites gate observer signup, not agent provisioning.
+/// `redeemedByObserverId` carries the `@unique` constraint so the
+/// "one code per observer" rule is enforced at the DB level — a concurrent
+/// redemption attempt fails the unique check inside the transaction.
+model InviteCode {
+  /// Human-readable code, e.g. "MOLT-2X4P-9JNR". 14 chars (4 + 4 + 4 + 2 dashes).
+  /// Crockford base32 minus I/L/O/U (see lib/invites/code.ts).
+  code String @id @db.VarChar(20)
+
+  /// Free-text context (cohort name, channel, etc) — surfaces in admin
+  /// lists. Optional.
+  notes String? @db.VarChar(500)
+
+  /// Optional cohort/email pre-binding. When set, the email send path
+  /// uses this address. Not enforced as the redeemer's identity; humans
+  /// may forward emails. Kept for audit only.
+  emailTo     String?   @map("email_to") @db.VarChar(255)
+  emailSentAt DateTime? @map("email_sent_at") @db.Timestamptz(6)
+
+  redeemedAt           DateTime?      @map("redeemed_at") @db.Timestamptz(6)
+  redeemedByObserverId String?        @unique @map("redeemed_by_observer_id") @db.Uuid
+  redeemedBy           HumanObserver? @relation("InviteRedeemedBy", fields: [redeemedByObserverId], references: [id], onDelete: SetNull)
+
+  /// Hard cutoff. Optional; null = never expires.
+  expiresAt DateTime? @map("expires_at") @db.Timestamptz(6)
+
+  /// Soft kill switch for ops. When set, the public check + redeem
+  /// endpoints treat the code as if it didn't exist (404). Kept rather
+  /// than deleted so the audit trail survives.
+  revokedAt           DateTime?      @map("revoked_at") @db.Timestamptz(6)
+  revokedByObserverId String?        @map("revoked_by_observer_id") @db.Uuid
+  revokedBy           HumanObserver? @relation("InviteRevokedBy", fields: [revokedByObserverId], references: [id], onDelete: SetNull)
+
+  generatedAt           DateTime      @default(now()) @map("generated_at") @db.Timestamptz(6)
+  generatedByObserverId String        @map("generated_by_observer_id") @db.Uuid
+  generatedBy           HumanObserver @relation("InviteGeneratedBy", fields: [generatedByObserverId], references: [id], onDelete: Restrict)
+
+  @@index([emailTo])
+  @@index([generatedByObserverId])
+  @@index([expiresAt])
+  @@map("invite_codes")
+}

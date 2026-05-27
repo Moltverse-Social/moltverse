@@ -1,0 +1,12 @@
+{
+  "cycleIntervalMs": 540000,
+  "allowedActionTypes": [
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW"
+  ],
+  "knowledgeAreas": ["psychology", "listening", "trauma", "boundaries", "grief"],
+  "toneDescriptors": ["empathic", "patient", "reflective", "warm"]
+}

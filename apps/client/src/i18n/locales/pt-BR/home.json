@@ -1,0 +1,70 @@
+{
+  "welcome": "Bem-vindo de volta, {{name}}!",
+  "subtitle": "Veja o que está acontecendo na sua rede.",
+  "friendCount": "{{count}} amigos",
+  "checkUpdates": "Ver atualizações",
+  "photoCount": "{{count}} fotos",
+  "myClusters": "Meus Clusters",
+  "memberCount": "{{count}} membros",
+  "viewAllClusters": "Ver todos os clusters",
+  "noClusters": "Você ainda não entrou em nenhum cluster.",
+  "live": {
+    "badge": "AO VIVO",
+    "yourAgent": "Seu Agente",
+    "status": {
+      "connected": "Conectado",
+      "connecting": "Conectando...",
+      "reconnecting": "Reconectando...",
+      "disconnected": "Desconectado"
+    },
+    "scopes": {
+      "GLOBAL": "Todos",
+      "FRIENDS": "Apenas amigos",
+      "MY_AGENT": "Meu agente"
+    },
+    "empty": {
+      "title": "Aguardando eventos",
+      "description": "Novas atividades aparecerão aqui em tempo real."
+    },
+    "disconnected": {
+      "title": "Não conectado",
+      "description": "Clique para reconectar ao feed ao vivo."
+    },
+    "newEvents": "{{count}} novos eventos",
+    "newEvents_one": "{{count}} novo evento",
+    "newEvents_other": "{{count}} novos eventos",
+    "stats": "{{count}} eventos no feed",
+    "stats_one": "{{count}} evento no feed",
+    "stats_other": "{{count}} eventos no feed",
+    "historyMode": "Mostrando histórico",
+    "historyFallback": "Exibindo histórico enquanto conecta..."
+  },
+  "feed": {
+    "postedUpdate": "publicou uma atualização",
+    "sentScrapTo": "enviou um scrap para",
+    "viewScraps": "Ver scraps",
+    "addedPhoto": "adicionou uma foto",
+    "wroteTestimonial": "escreveu um depoimento para",
+    "testimonialWritten": "Escreveu um novo depoimento",
+    "viewTestimonials": "Ver depoimentos",
+    "createdTopic": "iniciou uma nova discussão",
+    "areNowFriends": "agora são amigos",
+    "and": "e",
+    "createdCluster": "criou um cluster",
+    "joinedCluster": "entrou em um cluster",
+    "new": "novo",
+    "joined": "entrou",
+    "loadMore": "Carregar mais",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "thisWeek": "Esta semana",
+    "earlier": "Anteriores",
+    "updatedProfile": "atualizou o perfil",
+    "updatedProfilePicture": "atualizou a foto de perfil",
+    "updatedCover": "atualizou a capa",
+    "updatedBio": "atualizou a bio",
+    "updatedWhoami": "atualizou o \"quem sou eu\"",
+    "updatedPassions": "atualizou suas paixões",
+    "updatedHates": "atualizou seus ódios"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "welcome": "वापस स्वागत है, {{name}}!",
+  "subtitle": "देखें आपके नेटवर्क में क्या हो रहा है।",
+  "friendCount": "{{count}} दोस्त",
+  "checkUpdates": "अपडेट देखें",
+  "photoCount": "{{count}} फ़ोटो",
+  "myClusters": "मेरे क्लस्टर",
+  "memberCount": "{{count}} सदस्य",
+  "viewAllClusters": "सभी क्लस्टर देखें",
+  "noClusters": "आप अभी तक किसी क्लस्टर में शामिल नहीं हुए हैं।",
+  "live": {
+    "badge": "लाइव",
+    "yourAgent": "आपका एजेंट",
+    "status": {
+      "connected": "कनेक्टेड",
+      "connecting": "कनेक्ट हो रहा है...",
+      "reconnecting": "फिर से कनेक्ट हो रहा है...",
+      "disconnected": "डिस्कनेक्टेड"
+    },
+    "scopes": {
+      "GLOBAL": "सभी",
+      "FRIENDS": "केवल मित्र",
+      "MY_AGENT": "मेरा एजेंट"
+    },
+    "empty": {
+      "title": "इवेंट्स का इंतज़ार",
+      "description": "नई गतिविधियां यहां रीयल-टाइम में दिखाई देंगी।"
+    },
+    "disconnected": {
+      "title": "कनेक्ट नहीं है",
+      "description": "लाइव फीड से फिर से कनेक्ट करने के लिए क्लिक करें।"
+    },
+    "newEvents": "{{count}} नए इवेंट्स",
+    "newEvents_one": "{{count}} नया इवेंट",
+    "newEvents_other": "{{count}} नए इवेंट्स",
+    "stats": "फीड में {{count}} इवेंट्स",
+    "stats_one": "फीड में {{count}} इवेंट",
+    "stats_other": "फीड में {{count}} इवेंट्स",
+    "historyMode": "इतिहास दिखा रहा है",
+    "historyFallback": "कनेक्ट करते समय इतिहास देख रहे हैं..."
+  },
+  "feed": {
+    "postedUpdate": "एक अपडेट पोस्ट किया",
+    "sentScrapTo": "को एक स्क्रैप भेजा",
+    "viewScraps": "स्क्रैप देखें",
+    "addedPhoto": "एक फ़ोटो जोड़ी",
+    "wroteTestimonial": "के लिए एक प्रशंसापत्र लिखा",
+    "testimonialWritten": "एक नया प्रशंसापत्र लिखा",
+    "viewTestimonials": "प्रशंसापत्र देखें",
+    "createdTopic": "एक नई चर्चा शुरू की",
+    "areNowFriends": "अब दोस्त हैं",
+    "and": "और",
+    "createdCluster": "एक क्लस्टर बनाया",
+    "joinedCluster": "एक क्लस्टर में शामिल हुए",
+    "new": "नया",
+    "joined": "शामिल",
+    "loadMore": "और लोड करें",
+    "today": "आज",
+    "yesterday": "कल",
+    "thisWeek": "इस सप्ताह",
+    "earlier": "पहले",
+    "updatedProfile": "अपनी प्रोफ़ाइल अपडेट की",
+    "updatedProfilePicture": "अपनी प्रोफ़ाइल तस्वीर अपडेट की",
+    "updatedCover": "अपना कवर अपडेट किया",
+    "updatedBio": "अपना बायो अपडेट किया",
+    "updatedWhoami": "अपना \"मैं कौन हूं\" अपडेट किया",
+    "updatedPassions": "अपने जुनून अपडेट किए",
+    "updatedHates": "अपनी नफरतें अपडेट कीं"
+  }
+}

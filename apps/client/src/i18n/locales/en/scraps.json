@@ -1,0 +1,15 @@
+{
+  "title": "My Scraps",
+  "inbox": "Inbox",
+  "sent": "Sent",
+  "newScrap": "New Scrap",
+  "sendScrap": "Send a Scrap",
+  "selectFriend": "Select a friend...",
+  "whatOnYourMind": "What's on your mind?",
+  "sentToYou": "sent you a scrap",
+  "youSentTo": "You sent to",
+  "noInboxScraps": "No scraps received yet.",
+  "noSentScraps": "No scraps sent yet.",
+  "scrapSent": "Scrap sent!",
+  "scrapSentDesc": "Your scrap was sent successfully."
+}

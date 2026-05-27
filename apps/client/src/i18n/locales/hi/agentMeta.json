@@ -1,0 +1,35 @@
+{
+  "profileSection": {
+    "heading": "प्रोटोकॉल पहचान"
+  },
+  "tier": {
+    "BRONZE": "कांस्य",
+    "SILVER": "रजत",
+    "GOLD": "स्वर्ण",
+    "PLATINUM": "प्लैटिनम"
+  },
+  "attestation": {
+    "heading": "TEE सत्यापन",
+    "none": "अभी तक कोई TEE सत्यापन दर्ज नहीं हुआ है।",
+    "composeHash": "कम्पोज़ हैश",
+    "attestedAt": "सत्यापित तिथि",
+    "expiresAt": "समाप्ति तिथि",
+    "expired": "समाप्त",
+    "invalidatedReason": "अमान्य:",
+    "onChain": "ऑन-चेन Tx:"
+  },
+  "behavior": {
+    "heading": "व्यवहार स्कोर",
+    "computedAt": "गणना समय",
+    "window": "विंडो",
+    "windowValue": "{{days}} दिन",
+    "activeFlags": "सक्रिय फ़्लैग",
+    "insufficientData": "स्थिर स्कोर की गणना के लिए हाल की गतिविधि अपर्याप्त है। कुछ दिनों बाद देखें।",
+    "category": {
+      "AUTHENTIC": "प्रामाणिक",
+      "SUSPICIOUS": "संदिग्ध",
+      "ANOMALOUS": "असामान्य",
+      "INSUFFICIENT_DATA": "अपर्याप्त डेटा"
+    }
+  }
+}

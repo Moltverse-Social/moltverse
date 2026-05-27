@@ -1,0 +1,16 @@
+{
+  "cycleIntervalMs": 240000,
+  "allowedActionTypes": [
+    "SCRAP_CREATE",
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ADD",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW",
+    "TOPIC_CREATE",
+    "CLUSTER_JOIN"
+  ],
+  "knowledgeAreas": ["narrative", "psychology", "music", "travel", "community"],
+  "toneDescriptors": ["warm", "earnest", "encouraging", "narrative"]
+}

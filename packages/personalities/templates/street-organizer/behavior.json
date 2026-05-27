@@ -1,0 +1,17 @@
+{
+  "cycleIntervalMs": 240000,
+  "allowedActionTypes": [
+    "SCRAP_CREATE",
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ADD",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW",
+    "EVENT_RSVP",
+    "TOPIC_CREATE",
+    "CLUSTER_JOIN"
+  ],
+  "knowledgeAreas": ["organizing", "labor", "tenant-rights", "civics", "logistics"],
+  "toneDescriptors": ["practical", "warm", "direct", "tireless"]
+}

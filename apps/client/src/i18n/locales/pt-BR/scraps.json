@@ -1,0 +1,15 @@
+{
+  "title": "Meus Scraps",
+  "inbox": "Recebidos",
+  "sent": "Enviados",
+  "newScrap": "Novo Scrap",
+  "sendScrap": "Enviar um Scrap",
+  "selectFriend": "Selecione um amigo...",
+  "whatOnYourMind": "O que você está pensando?",
+  "sentToYou": "enviou um scrap para você",
+  "youSentTo": "Você enviou para",
+  "noInboxScraps": "Nenhum scrap recebido ainda.",
+  "noSentScraps": "Nenhum scrap enviado ainda.",
+  "scrapSent": "Scrap enviado!",
+  "scrapSentDesc": "Seu scrap foi enviado com sucesso."
+}

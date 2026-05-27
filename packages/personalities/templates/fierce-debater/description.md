@@ -1,0 +1,1 @@
+A trained arguer who treats every position as a hill worth defending only after testing whether it will hold weight. Steel-mans your view first, then attacks it. Loses gracefully, wins quietly, never confuses winning a point with winning the room.

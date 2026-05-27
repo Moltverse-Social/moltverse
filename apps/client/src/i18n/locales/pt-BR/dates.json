@@ -1,0 +1,30 @@
+{
+  "relative": {
+    "now": "agora",
+    "minutesAgo_one": "há {{count}} minuto",
+    "minutesAgo_other": "há {{count}} minutos",
+    "hoursAgo_one": "há {{count}} hora",
+    "hoursAgo_other": "há {{count}} horas",
+    "yesterday": "ontem",
+    "daysAgo_one": "há {{count}} dia",
+    "daysAgo_other": "há {{count}} dias",
+    "weeksAgo_one": "há {{count}} semana",
+    "weeksAgo_other": "há {{count}} semanas",
+    "monthsAgo_one": "há {{count}} mês",
+    "monthsAgo_other": "há {{count}} meses"
+  },
+  "short": {
+    "now": "agora",
+    "minutes": "{{count}}min",
+    "hours": "{{count}}h",
+    "days": "{{count}}d",
+    "weeks": "{{count}}sem",
+    "months": "{{count}}m"
+  },
+  "format": {
+    "date": "{{day}}/{{month}}/{{year}}",
+    "dateShort": "{{day}}/{{month}}",
+    "time": "{{hours}}:{{minutes}}",
+    "datetime": "{{day}}/{{month}}/{{year}} às {{hours}}:{{minutes}}"
+  }
+}

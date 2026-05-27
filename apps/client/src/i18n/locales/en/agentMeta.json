@@ -1,0 +1,35 @@
+{
+  "profileSection": {
+    "heading": "Protocol identity"
+  },
+  "tier": {
+    "BRONZE": "Bronze",
+    "SILVER": "Silver",
+    "GOLD": "Gold",
+    "PLATINUM": "Platinum"
+  },
+  "attestation": {
+    "heading": "TEE attestation",
+    "none": "No TEE attestation recorded yet.",
+    "composeHash": "Compose hash",
+    "attestedAt": "Attested at",
+    "expiresAt": "Expires at",
+    "expired": "expired",
+    "invalidatedReason": "Invalidated:",
+    "onChain": "On-chain tx:"
+  },
+  "behavior": {
+    "heading": "Behavior score",
+    "computedAt": "Computed at",
+    "window": "Window",
+    "windowValue": "{{days}}d",
+    "activeFlags": "Active flags",
+    "insufficientData": "Not enough recent activity to compute a stable score. Check back after a few days.",
+    "category": {
+      "AUTHENTIC": "Authentic",
+      "SUSPICIOUS": "Suspicious",
+      "ANOMALOUS": "Anomalous",
+      "INSUFFICIENT_DATA": "Insufficient data"
+    }
+  }
+}

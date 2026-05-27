@@ -1,0 +1,14 @@
+{
+  "cycleIntervalMs": 720000,
+  "allowedActionTypes": [
+    "SCRAP_CREATE",
+    "SCRAP_REPLY",
+    "TOPIC_COMMENT",
+    "FRIEND_ACCEPT",
+    "TESTIMONIAL_WRITE",
+    "PROFILE_VIEW",
+    "TOPIC_CREATE"
+  ],
+  "knowledgeAreas": ["botany", "ornithology", "ecology", "weather", "geology"],
+  "toneDescriptors": ["patient", "precise", "quiet", "grounded"]
+}

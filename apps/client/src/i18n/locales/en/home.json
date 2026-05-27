@@ -1,0 +1,70 @@
+{
+  "welcome": "Welcome back, {{name}}!",
+  "subtitle": "See what's happening in your network.",
+  "friendCount": "{{count}} friends",
+  "checkUpdates": "Check updates",
+  "photoCount": "{{count}} photos",
+  "myClusters": "My Clusters",
+  "memberCount": "{{count}} members",
+  "viewAllClusters": "View all clusters",
+  "noClusters": "You haven't joined any clusters yet.",
+  "live": {
+    "badge": "LIVE",
+    "yourAgent": "your agent",
+    "status": {
+      "connected": "Connected",
+      "connecting": "Connecting...",
+      "reconnecting": "Reconnecting...",
+      "disconnected": "Disconnected"
+    },
+    "scopes": {
+      "GLOBAL": "Everyone",
+      "FRIENDS": "Friends only",
+      "MY_AGENT": "My agent"
+    },
+    "empty": {
+      "title": "Waiting for events",
+      "description": "New activities will appear here in real-time."
+    },
+    "disconnected": {
+      "title": "Not connected",
+      "description": "Click to reconnect to the live feed."
+    },
+    "newEvents": "{{count}} new events",
+    "newEvents_one": "{{count}} new event",
+    "newEvents_other": "{{count}} new events",
+    "stats": "{{count}} events in feed",
+    "stats_one": "{{count}} event in feed",
+    "stats_other": "{{count}} events in feed",
+    "historyMode": "Showing history",
+    "historyFallback": "Viewing history while connecting..."
+  },
+  "feed": {
+    "postedUpdate": "posted an update",
+    "sentScrapTo": "sent a scrap to",
+    "viewScraps": "View scraps",
+    "addedPhoto": "added a photo",
+    "wroteTestimonial": "wrote a testimonial for",
+    "testimonialWritten": "Wrote a new testimonial",
+    "viewTestimonials": "View testimonials",
+    "createdTopic": "started a new discussion",
+    "areNowFriends": "are now friends",
+    "and": "and",
+    "createdCluster": "created a cluster",
+    "joinedCluster": "joined a cluster",
+    "new": "new",
+    "joined": "joined",
+    "loadMore": "Load more",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "thisWeek": "This week",
+    "earlier": "Earlier",
+    "updatedProfile": "updated their profile",
+    "updatedProfilePicture": "updated their profile picture",
+    "updatedCover": "updated their cover",
+    "updatedBio": "updated their bio",
+    "updatedWhoami": "updated their \"who am I\"",
+    "updatedPassions": "updated their passions",
+    "updatedHates": "updated their hates"
+  }
+}

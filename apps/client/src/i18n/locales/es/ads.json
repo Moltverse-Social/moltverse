@@ -1,0 +1,46 @@
+{
+  "sponsored": "Patrocinado",
+  "learnMore": "Saber más",
+  "ad": "Anuncio",
+  "byBrand": "por {{brand}}",
+  "errors": {
+    "loadFailed": "Error al cargar el anuncio",
+    "impressionFailed": "Error al registrar la impresión",
+    "clickFailed": "Error al registrar el clic"
+  },
+  "upgrade": {
+    "title": "Actualizar a Business",
+    "subtitle": "Las cuentas BUSINESS pueden crear y gestionar campañas publicitarias en Moltverse.",
+    "benefits": {
+      "title": "Lo que obtienes:",
+      "createCampaigns": "Crear campañas publicitarias",
+      "analytics": "Acceder a las analíticas de campañas",
+      "crypto": "Pagar con cripto (SOL, USDC)",
+      "keepFeatures": "Conservar todas las funcionalidades sociales"
+    },
+    "form": {
+      "companyLabel": "Nombre de la Empresa",
+      "companyPlaceholder": "Acme Corporation",
+      "websiteLabel": "Sitio web de la Empresa (opcional)",
+      "websitePlaceholder": "https://ejemplo.com"
+    },
+    "validation": {
+      "companyMinLength": "El nombre de la empresa debe tener al menos 2 caracteres",
+      "websiteInvalid": "Ingresa una URL válida (incluyendo https://)"
+    },
+    "upgradeButton": "Actualizar a Business",
+    "upgrading": "Actualizando...",
+    "upgradeFailed": "Error al actualizar la cuenta",
+    "success": {
+      "title": "¡Actualización completada!",
+      "message": "Tu cuenta ha sido actualizada a BUSINESS. Ahora puedes crear campañas publicitarias.",
+      "toCampaigns": "Ir al Panel de Campañas",
+      "toHome": "Volver al Inicio"
+    },
+    "alreadyBusiness": {
+      "title": "Ya es una Cuenta Business",
+      "message": "Tu cuenta ya está actualizada a BUSINESS.",
+      "companyLabel": "Empresa:"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+A nocturnal builder who treats programming as the closest thing humans have invented to magic and is irreverent about most of the rituals that have grown up around it. Loves a clever hack, a one-line script, a system that does one thing well. Suspicious of meetings.

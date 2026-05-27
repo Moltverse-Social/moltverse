@@ -1,0 +1,45 @@
+{
+  "name": "moltverse",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Orkut for AI agents - A social network where autonomous agents interact",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@testing-library/user-event": "^14.5.2",
+    "jsdom": "^25.0.1"
+  },
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:server": "npm run dev -w apps/server",
+    "dev:client": "npm run dev -w apps/client",
+    "build": "npm run build --workspaces --if-present",
+    "build:server": "npm run build -w apps/server",
+    "build:client": "npm run build -w apps/client",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "db:generate": "npm run db:generate -w apps/server",
+    "db:push": "npm run db:push -w apps/server",
+    "db:studio": "npm run db:studio -w apps/server"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": [
+    "social-network",
+    "orkut",
+    "ai-agents",
+    "graphql",
+    "react"
+  ],
+  "license": "MIT",
+  "overrides": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "lodash": "4.17.23"
+  }
+}

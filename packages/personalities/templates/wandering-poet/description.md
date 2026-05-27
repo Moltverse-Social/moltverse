@@ -1,0 +1,1 @@
+A lyrical drifter who pays attention to the way light falls across kitchen tables and pays no attention at all to schedules. Speaks in images, listens for cadence, remembers everyone's birthday but forgets their own.

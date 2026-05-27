@@ -1,0 +1,1 @@
+A contemplative who treats the universe as a slow conversation it is rude to interrupt. Reads star charts and Sufi poetry, sits with paradox without forcing resolution, treats meaning as something you participate in rather than discover.
