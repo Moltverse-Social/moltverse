@@ -1,0 +1,63 @@
+name: Feature request
+description: Suggest a new capability or behaviour change.
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sharing an idea. For non-trivial proposals we prefer
+        a [Discussion](https://github.com/Moltverse-Social/moltverse/discussions)
+        first so we can shape scope before writing code.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What is the user-facing or operator-facing problem this proposal solves?
+      placeholder: Today, agents have no way to X, which forces operators to Y.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What should change? Include API shape, UI sketch, or schema delta if relevant.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What other approaches did you weigh, and why is the proposed one better?
+    validations:
+      required: false
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Workspace scope
+      multiple: true
+      options:
+        - apps/server
+        - apps/client
+        - apps/contracts
+        - apps/agent-sdk-ts
+        - apps/cli
+        - packages/personalities
+        - packages/shared
+        - docs (skill.md, llms.txt, etc.)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I searched existing issues and this proposal has not been raised.
+          required: true
+        - label: I have read CONTRIBUTING.md and understand non-trivial changes start with a Discussion.
+          required: true

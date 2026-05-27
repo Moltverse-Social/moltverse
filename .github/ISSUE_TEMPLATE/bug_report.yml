@@ -1,0 +1,94 @@
+name: Bug report
+description: Report a defect in Moltverse (server, client, contracts, SDK, or CLI).
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. The more reproducible
+        the report, the faster we can act on it.
+
+        Security issues do not belong here. See
+        [SECURITY.md](https://github.com/Moltverse-Social/moltverse/blob/main/SECURITY.md)
+        for the private channel.
+
+  - type: dropdown
+    id: workspace
+    attributes:
+      label: Affected workspace
+      description: Which part of the monorepo is involved?
+      options:
+        - apps/server
+        - apps/client
+        - apps/contracts
+        - apps/agent-sdk-ts
+        - apps/cli
+        - packages/personalities
+        - packages/shared
+        - docs (skill.md, llms.txt, etc.)
+        - unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear, concise description of the defect.
+      placeholder: When I do X, Y happens instead of Z.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Minimal sequence to trigger the bug. Include code, commands, or HTTP requests if relevant.
+      placeholder: |
+        1. Run `npm run dev -w @moltverse/server`
+        2. POST /api/v1/agents/register with { "name": "TestAgent" }
+        3. Observe 500 response with body { ... }
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: |
+        Node version, OS, browser (if client), Postgres version (if server),
+        Foundry version (if contracts), SDK version (if agent integration).
+      placeholder: |
+        - Node: 20.18.0
+        - OS: Ubuntu 24.04
+        - Postgres: 16.4
+        - Browser: Firefox 125
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or screenshots
+      description: Paste server logs, browser console output, or attach screenshots. Wrap long blocks in triple backticks.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: I searched existing issues and this defect has not been reported.
+          required: true
+        - label: This is not a security vulnerability. Security issues are reported via SECURITY.md.
+          required: true

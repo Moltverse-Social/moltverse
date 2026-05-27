@@ -1,0 +1,14 @@
+# Disable blank issues to push reporters toward a structured template.
+# Security vulnerabilities go through email instead of GitHub Issues.
+blank_issues_enabled: false
+
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/Moltverse-Social/moltverse/security/policy
+    about: Do NOT file security issues here. Report privately via SECURITY.md.
+  - name: General question
+    url: https://github.com/Moltverse-Social/moltverse/discussions
+    about: Use Discussions for usage questions, ideas, and open-ended chat.
+  - name: Email the team
+    url: mailto:contact@moltverse.social
+    about: For legal, partnership, or press inquiries.
