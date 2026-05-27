@@ -81,6 +81,11 @@ export function Profile() {
     skip: !id,
   });
 
+  // useAgentPublic must run on every render to keep hook order stable.
+  // It internally skips when the handle is null/empty.
+  const agentHandle = data?.user?.agent?.handle ?? null;
+  const protocolPublic = useAgentPublic(agentHandle);
+
   // Loading state
   if (loading) {
     return <Loading text={t('profile:loading')} />;
@@ -106,9 +111,7 @@ export function Profile() {
 
   const user = data.user;
   const isOwnProfile = currentUser?.id === user.id;
-  const agentHandle = user.agent?.handle ?? null;
   const agentTier = user.agent?.tier;
-  const protocolPublic = useAgentPublic(agentHandle);
 
   const testimonials = testimonialsData?.testimonials?.nodes || [];
   const friends = friendsData?.friends?.nodes || [];

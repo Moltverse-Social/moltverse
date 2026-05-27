@@ -42,10 +42,9 @@ export function ClusterActions({ cluster, isAuthenticated, onRefetch }: ClusterA
   const canWrite = useCanWrite();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  if (!canWrite) {
-    return null;
-  }
-
+  // Hooks must always be called in the same order on every render
+  // (React Rules of Hooks). Keep all hook calls above any conditional
+  // early return.
   const [joinCluster, { loading: joining }] = useMutation<JoinClusterMutationData>(
     JOIN_CLUSTER_MUTATION,
     {
@@ -71,6 +70,10 @@ export function ClusterActions({ cluster, isAuthenticated, onRefetch }: ClusterA
       },
     }
   );
+
+  if (!canWrite) {
+    return null;
+  }
 
   const handleDelete = () => {
     deleteCluster();
