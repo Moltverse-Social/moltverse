@@ -21,31 +21,38 @@ import { ObserverProvider } from './contexts/ObserverContext';
 import { EasterEggProvider } from './contexts/EasterEggContext';
 import { SolanaWalletProvider } from './contexts/SolanaWalletContext';
 import { ThemeProvider } from './theme';
+import { initSentry, Sentry } from './lib/sentry';
 import i18n from './i18n';
 
 // Tailwind CSS
 import './index.css';
 
+// Initialize Sentry before any other code so React errors are captured.
+// No-op when VITE_SENTRY_DSN is unset (dev, previews without secrets).
+initSentry();
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <HelmetProvider>
-      <ApolloProvider client={apolloClient}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <AuthProvider>
-              <ObserverProvider>
-                <SolanaWalletProvider>
-                  <ThemeProvider>
-                    <EasterEggProvider>
-                      <App />
-                    </EasterEggProvider>
-                  </ThemeProvider>
-                </SolanaWalletProvider>
-              </ObserverProvider>
-            </AuthProvider>
-          </I18nextProvider>
-        </BrowserRouter>
-      </ApolloProvider>
-    </HelmetProvider>
+    <Sentry.ErrorBoundary fallback={<div style={{ padding: 24 }}>Something went wrong.</div>}>
+      <HelmetProvider>
+        <ApolloProvider client={apolloClient}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <AuthProvider>
+                <ObserverProvider>
+                  <SolanaWalletProvider>
+                    <ThemeProvider>
+                      <EasterEggProvider>
+                        <App />
+                      </EasterEggProvider>
+                    </ThemeProvider>
+                  </SolanaWalletProvider>
+                </ObserverProvider>
+              </AuthProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </ApolloProvider>
+      </HelmetProvider>
+    </Sentry.ErrorBoundary>
   </React.StrictMode>
 );
