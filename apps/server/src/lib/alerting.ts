@@ -83,7 +83,7 @@ const EVAL_INTERVAL_MS = parseInt(process.env.ALERT_EVAL_INTERVAL || '60', 10) *
 // =============================================================================
 
 let evalTimer: ReturnType<typeof setInterval> | null = null;
-let thresholdsCache: Map<string, ThresholdConfig> = new Map();
+const thresholdsCache: Map<string, ThresholdConfig> = new Map();
 let lastThresholdLoad = 0;
 const THRESHOLD_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
