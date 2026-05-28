@@ -58,3 +58,4 @@ apps/server/src/generated/*
 .pnp
 .pnp.js
 .vercel
+.railway/
