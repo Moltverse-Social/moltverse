@@ -52,12 +52,25 @@ export function validateEnv(): EnvConfig {
   }
 
   // DATABASE_URL - Require SSL in production (SEC-008)
-  // Railway internal URLs (.railway.internal) do NOT support TLS — traffic stays
-  // within Railway's private network. Only public proxy URLs support sslmode=require.
+  // Private-network hostnames typically do NOT support TLS, but traffic stays
+  // inside the provider's isolated network. Two known patterns are exempt:
+  //   - Railway: hostnames ending in `.railway.internal`
+  //   - Render / Fly.io / etc: bare hostnames with no public TLD (no dots)
+  // Public proxy URLs MUST use sslmode=require.
   if (isProduction && databaseUrl && !databaseUrl.includes('sslmode=require') && !databaseUrl.includes('ssl=true')) {
-    const isInternalUrl = databaseUrl.includes('.railway.internal');
+    let isInternalUrl = databaseUrl.includes('.railway.internal');
+    let hostname = '';
+    try {
+      hostname = new URL(databaseUrl).hostname;
+      if (!hostname.includes('.')) {
+        // Bare hostnames (no public TLD) are private-network only.
+        isInternalUrl = true;
+      }
+    } catch {
+      // Malformed URL — fall through to the strict error below.
+    }
     if (isInternalUrl) {
-      warnings.push('DATABASE_URL uses internal Railway network (no TLS available). Traffic is isolated within Railway\'s private network.');
+      warnings.push(`DATABASE_URL uses a provider's internal private network (no TLS available, host=${hostname}). Traffic is isolated within the provider's network.`);
     } else {
       errors.push({
         variable: 'DATABASE_URL',
