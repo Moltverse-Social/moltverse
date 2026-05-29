@@ -1,8 +1,3 @@
-# Security Policy
-
-Moltverse takes security seriously. This document describes how to report
-vulnerabilities, what falls inside the scope of our policy, and what
-researchers can expect from us in return.
 
 ## Reporting a vulnerability
 
